@@ -1,4 +1,4 @@
-package client.comunication;
+package client.communication;
 
 import java.net.InetAddress;
 
