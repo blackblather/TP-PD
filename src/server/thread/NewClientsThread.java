@@ -1,32 +1,42 @@
 package server.thread;
 
-import server.communication.TCPCommunication;
 import server.controller.ServerController;
+import server.network.TCPService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class NewClientsThread extends Thread {
     private ServerSocket serverSocket;
     private ServerController controller;
-    private List<Thread> clientThreads = new ArrayList<>();
+    private boolean isThreadStopped = false;
 
     public NewClientsThread(ServerSocket serverSocket, ServerController controller){
         this.serverSocket = serverSocket;
         this.controller = controller;
     }
 
+    //EXAMPLE JSON REQUEST: {"Type":"Login","Content":{"username":"blackBladder","password":"blueNails"}}
+
     @Override
     public void run() {
         //Created thread for accepting new clients
-        while (true){
+        while (!isThreadStopped()){
             try {
-                TCPCommunication tcpCommunication = new TCPCommunication(serverSocket.accept(), controller);
-                clientThreads.add(tcpCommunication);
-                tcpCommunication.start();
-            } catch (IOException e){ }
+                new TCPService(serverSocket.accept(), controller).start();
+            } catch (IOException e){
+                System.out.println("Error accepting client connection.\nError message: " + e.getMessage());
+            }
         }
+        System.out.println("Server stopped");
+    }
+
+    private synchronized boolean isThreadStopped() {
+        return this.isThreadStopped;
+    }
+
+    public synchronized void stopThread() throws IOException{
+        this.serverSocket.close();
+        this.isThreadStopped = true;
     }
 }
