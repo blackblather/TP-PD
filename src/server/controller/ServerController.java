@@ -1,13 +1,13 @@
 package server.controller;
 
-import server.communication.ICommunication;
+import server.network.INetworkService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServerController implements IController {
 
-    private List<ICommunication> observers = new ArrayList<>();
+    private List<INetworkService> observers = new ArrayList<>();
 
     public ServerController(){
 
@@ -17,7 +17,7 @@ public class ServerController implements IController {
 
     }
 
-    public void AddObserver(ICommunication obs){
+    public void AddObserver(INetworkService obs){
         if(observers.contains(obs))
             throw new IllegalArgumentException("Observer is already registered.");
         observers.add(obs);
