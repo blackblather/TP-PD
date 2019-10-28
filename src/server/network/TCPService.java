@@ -7,15 +7,22 @@ import server.controller.ServerController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.function.Consumer;
 
 public class TCPService implements INetworkService<String>, Runnable {
     private Socket socket;
     private ServerController controller;
 
-    public TCPService(Socket socket, ServerController controller) throws IllegalArgumentException{
+    //Synchronization vars
+    private final Object connectedClientsLock;
+    private int[] connectedClients;
+
+    public TCPService(Socket socket, ServerController controller, final Object connectedClientsLock, int[] connectedClients) throws IllegalArgumentException{
         this.socket = socket;
         this.controller = controller;
         this.controller.AddObserver(this);
+        this.connectedClientsLock = connectedClientsLock;
+        this.connectedClients = connectedClients;
     }
 
     private void RouteMsg(String msg) throws JSONException{
@@ -62,10 +69,17 @@ public class TCPService implements INetworkService<String>, Runnable {
                     System.out.println(e.getMessage());
                 }
             }
+            DecrementConnectedClients();
             System.out.println("Connection closed");
             //Connection closed
         } catch (IOException e) {
             System.out.println("IOException. Error message: " + e.getMessage());
+        }
+    }
+
+    private void DecrementConnectedClients(){
+        synchronized (connectedClientsLock) {
+            connectedClients[0]--;
         }
     }
 

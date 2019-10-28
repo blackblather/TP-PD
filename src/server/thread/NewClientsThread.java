@@ -20,7 +20,8 @@ public class NewClientsThread extends Thread {
     private boolean isThreadStopped = false;
     private final Integer maxClients = 2;
     private ExecutorService tcpService = Executors.newFixedThreadPool(maxClients);
-    private Integer connectedClients = 0;
+    private int[] connectedClients = {0};
+    private final Object connectedClientsLock = new Object();
 
     public NewClientsThread(ServerSocket serverSocket, ServerController controller){
         this.serverSocket = serverSocket;
@@ -29,6 +30,7 @@ public class NewClientsThread extends Thread {
 
     //EXAMPLE JSON REQUEST: {"Type":"Login","Content":{"username":"blackBladder","password":"blueNails"}}
     //EXAMPLE JSON RESPONSE {"Response_Code":0,"Response_Description":"Server if full"}
+
     @Override
     public void run() {
         //Created thread for accepting new clients
@@ -42,11 +44,12 @@ public class NewClientsThread extends Thread {
                 if(ServerIsFull()){
                     JSONResponse = new JSONObject("{\"Response_Code\":0,\"Response_Description\":\"Server if full\"}");
                     outputStream.write(JSONResponse.toString().getBytes());
-                } else
+                } else {
                     JSONResponse = new JSONObject("{\"Response_Code\":1,\"Response_Description\":\"Client accepted\"}");
                     outputStream.write(JSONResponse.toString().getBytes());
-                    tcpService.execute(new TCPService(tmpClientSocket, controller));
+                    tcpService.execute(new TCPService(tmpClientSocket, controller, connectedClientsLock, connectedClients));
                     IncrementConnectedClients();
+                }
             } catch (IOException e){
                 System.out.println("Error accepting client connection or writing server response.\nError message: " + e.getMessage());
             }
@@ -54,12 +57,21 @@ public class NewClientsThread extends Thread {
         System.out.println("Server stopped");
     }
 
-    private synchronized void IncrementConnectedClients(){
-        connectedClients++;
+    private void IncrementConnectedClients(){
+        /*Não usar método synchronized.
+          Não quero evitar chamadas simultâneas a este método.
+          Quero evitar alterações/leituas simultaneas à variável "connectedClients", passada por
+          referência para as threads TCPService.
+          Usava o método syncronized se houvessem 2+ threads a chamar a mesma função do mesmo objecto*/
+        synchronized (connectedClientsLock){
+            connectedClients[0]++;
+        }
     }
 
-    private synchronized boolean ServerIsFull(){
-        return connectedClients.equals(maxClients);
+    private boolean ServerIsFull(){
+        synchronized (connectedClientsLock) {
+            return connectedClients[0] == maxClients;
+        }
     }
 
     private synchronized boolean isThreadStopped() {
