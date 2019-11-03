@@ -1,5 +1,6 @@
 package server.controller;
 
+import common.model.ServerResponse;
 import server.network.INetworkService;
 
 import java.util.ArrayList;
@@ -13,8 +14,10 @@ public class ServerController implements IController {
 
     }
 
-    private void Notify(Object o){
-
+    private void Notify(ServerResponse response){
+        if(response != null)
+            for (INetworkService observer : observers)
+                observer.Update(response);
     }
 
     public void AddObserver(INetworkService obs){
@@ -25,54 +28,56 @@ public class ServerController implements IController {
 
     /********************** INTERFACE IMPLEMENTATION **********************/
     @Override
-    public void Login(String username, String password) {
+    public void Login(Object ref, String username, String password) {
         System.out.println("GOT LOGIN REQUEST:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
+        Notify(new ServerResponse(true, "login", "Login Successful", ref));
     }
 
     @Override
-    public void AddMusic(String username, String name, String author, String album, String year, String path) {
-
-    }
-
-    @Override
-    public void AddPlaylist(String username, String name) {
+    public void AddMusic(Object ref, String username, String name, String author, String album, String year, String path) {
 
     }
 
     @Override
-    public void AddUser(String username, String password) {
+    public void AddPlaylist(Object ref, String username, String name) {
 
     }
 
     @Override
-    public void RemoveMusic(String name) {
+    public void AddUser(Object ref, String username, String password) {
 
     }
 
     @Override
-    public void RemovePlaylist(String name) {
+    public void RemoveMusic(Object ref, String name) {
 
     }
 
     @Override
-    public void GetMusics() {
+    public void RemovePlaylist(Object ref, String name) {
 
     }
 
     @Override
-    public void GetMusic(String name) {
+    public void GetMusics(Object ref) {
 
     }
 
     @Override
-    public void GetPlaylists() {
+    public void GetMusic(Object ref, String name) {
 
     }
 
     @Override
-    public void GetPlaylist(String name) {
+    public void GetPlaylists(Object ref) {
 
     }
+
+    @Override
+    public void GetPlaylist(Object ref, String name) {
+
+    }
+
 }
