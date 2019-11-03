@@ -1,5 +1,8 @@
 package server.network;
 
+import common.model.ServerResponse;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.*;
 
@@ -7,7 +10,7 @@ import java.net.*;
  * @author João Monteiro
  * Description: Provides mechanisms used for multicast communication between servers
  ***/
-public class MulticastService implements INetworkService<String> {
+public class MulticastService implements INetworkService {
     private final Integer MAX_PACKET_SIZE = 4000; //bytes
     private InetAddress  multicastAddr;
     private MulticastSocket multicastSocket;
@@ -27,13 +30,13 @@ public class MulticastService implements INetworkService<String> {
     }
 
     @Override
-    public void Update(Object o) {
+    public void Update(ServerResponse resp) {
 
     }
 
     @Override
-    public void SendMsg(String obj) throws IOException, IllegalArgumentException {
-        byte[] bytes = obj.getBytes();
+    public void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException {
+        byte[] bytes = jsonObject.toString().getBytes();
 
         if(bytes.length > MAX_PACKET_SIZE)
             throw new IllegalArgumentException("Message exceeds size limit of " + MAX_PACKET_SIZE);
@@ -42,9 +45,16 @@ public class MulticastService implements INetworkService<String> {
         multicastSocket.send(p);
     }
 
-    public void ReceiveMsg() throws IOException {
+    @Override
+    public void ReceiveMsg() {
         DatagramPacket p = new DatagramPacket(new byte[MAX_PACKET_SIZE], MAX_PACKET_SIZE);
-        multicastSocket.receive(p);
-        String text = new String(p.getData(), 0, p.getLength());
+        while(true) {
+            try{
+                multicastSocket.receive(p);
+                String text = new String(p.getData(), 0, p.getLength());
+            } catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

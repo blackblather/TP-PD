@@ -1,20 +1,24 @@
 package server.network;
 
+import common.model.ServerResponse;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 
-public class UDPService implements INetworkService<DatagramPacket> {
+public class UDPService implements INetworkService {
     @Override
-    public void Update(Object o) {
+    public void Update(ServerResponse resp) {
 
     }
 
     @Override
-    public void SendMsg(DatagramPacket msg) throws IOException, IllegalArgumentException {
+    public void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException {
 
     }
 
-    public void ReceiveMsg() throws IOException {
+    @Override
+    public void ReceiveMsg() {
 
     }
 }
