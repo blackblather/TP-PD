@@ -13,7 +13,7 @@ public class UDPService implements INetworkService {
     }
 
     @Override
-    public void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException {
+    public void SendMsg(String jsonStr) throws IOException, IllegalArgumentException {
 
     }
 

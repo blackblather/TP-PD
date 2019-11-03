@@ -7,6 +7,6 @@ import java.io.IOException;
 
 public interface INetworkService{
     void Update(ServerResponse resp);
-    void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException;
+    void SendMsg(String jsonStr) throws IOException, IllegalArgumentException;
     void ReceiveMsg();
 }

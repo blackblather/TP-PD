@@ -35,8 +35,8 @@ public class MulticastService implements INetworkService {
     }
 
     @Override
-    public void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException {
-        byte[] bytes = jsonObject.toString().getBytes();
+    public void SendMsg(String jsonStr) throws IOException, IllegalArgumentException {
+        byte[] bytes = jsonStr.getBytes();
 
         if(bytes.length > MAX_PACKET_SIZE)
             throw new IllegalArgumentException("Message exceeds size limit of " + MAX_PACKET_SIZE);
