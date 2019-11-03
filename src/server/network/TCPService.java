@@ -7,6 +7,7 @@ import server.controller.ServerController;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class TCPService implements INetworkService {
@@ -16,6 +17,9 @@ public class TCPService implements INetworkService {
     public TCPService(Socket socket, ServerController controller) throws IllegalArgumentException{
         this.socket = socket;
         this.controller = controller;
+        /*Warning: When constructing an object that will be shared between threads,
+          be very careful that a reference to the object does not "leak" prematurely.
+          Source: https://docs.oracle.com/javase/tutorial/essential/concurrency/syncmeth.html*/
         this.controller.AddObserver(this);
     }
 
@@ -41,11 +45,20 @@ public class TCPService implements INetworkService {
 
     @Override
     public void Update(ServerResponse resp) {
+        if(resp.ref == this)
+            SendMsg("{\"response_success\":" + resp.success + ", \"response_type\":\"" + resp.type + "\", \"response_description\":\"" + resp.description + "\"}");
     }
 
     @Override
-    public void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException {
-
+    public void SendMsg(String jsonStr) throws IllegalArgumentException {
+        try{
+            OutputStream outputStream = socket.getOutputStream();
+            byte[] byteArr = jsonStr.getBytes();
+            outputStream.write(byteArr);
+            outputStream.flush();
+        } catch (IOException e){
+            System.out.println("IOException. Error message: " + e.getMessage());
+        }
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ServerController implements IController {
         System.out.println("GOT LOGIN REQUEST:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
-        Notify(new ServerResponse(true, "login", "Login Successful", ref));
+        Notify(new ServerResponse(true, "Login", "Login Successful", ref));
     }
 
     @Override
