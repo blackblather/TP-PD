@@ -45,7 +45,7 @@ public class NewClientsThread extends Thread {
                 } else {
                     JSONResponse = new JSONObject("{\"Response_Code\":1,\"Response_Description\":\"Client accepted\"}");
                     outputStream.write(JSONResponse.toString().getBytes());
-                    clientService.execute(new ClientThread(clientSocket, controller, connectedClientsLock, connectedClients));
+                    clientService.execute(new ClientRunnable(clientSocket, controller, connectedClientsLock, connectedClients));
                     IncrementConnectedClients();
                 }
             } catch (IOException e){

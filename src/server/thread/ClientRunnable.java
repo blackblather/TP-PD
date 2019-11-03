@@ -5,15 +5,14 @@ import server.network.TCPService;
 
 import java.net.Socket;
 
-public class ClientThread implements Runnable {
-
+public class ClientRunnable implements Runnable {
     private TCPService tcpService;
 
     //Synchronization vars
     private int[] connectedClients;
     private final Object connectedClientsLock;
 
-    ClientThread(Socket socket, ServerController controller, final Object connectedClientsLock, int[] connectedClients){
+    ClientRunnable(Socket socket, ServerController controller, final Object connectedClientsLock, int[] connectedClients){
         this.connectedClients = connectedClients;
         this.connectedClientsLock = connectedClientsLock;
         this.tcpService = new TCPService(socket, controller);
