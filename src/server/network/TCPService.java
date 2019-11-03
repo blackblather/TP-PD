@@ -2,27 +2,21 @@ package server.network;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import common.model.ServerResponse;
 import server.controller.ServerController;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.function.Consumer;
 
-public class TCPService implements INetworkService<String>, Runnable {
+public class TCPService implements INetworkService {
     private Socket socket;
     private ServerController controller;
 
-    //Synchronization vars
-    private final Object connectedClientsLock;
-    private int[] connectedClients;
-
-    public TCPService(Socket socket, ServerController controller, final Object connectedClientsLock, int[] connectedClients) throws IllegalArgumentException{
+    public TCPService(Socket socket, ServerController controller) throws IllegalArgumentException{
         this.socket = socket;
         this.controller = controller;
         this.controller.AddObserver(this);
-        this.connectedClientsLock = connectedClientsLock;
-        this.connectedClients = connectedClients;
     }
 
     private void RouteMsg(String msg) throws JSONException{
@@ -32,7 +26,7 @@ public class TCPService implements INetworkService<String>, Runnable {
             switch(jsonMsg.getString("Type")){
                 case "Login": {
                     if(jsonContent.has("username") && jsonContent.has("password"))
-                        controller.Login(jsonContent.getString("username"), jsonContent.getString("password"));             //LOGIN
+                        controller.Login(this, jsonContent.getString("username"), jsonContent.getString("password"));             //LOGIN
                     else
                         throw new JSONException("JSON message format error.\nMissing one or more fields:\n - username\n - password");
                 } break;
@@ -46,17 +40,16 @@ public class TCPService implements INetworkService<String>, Runnable {
     }
 
     @Override
-    public void Update(Object o) {
+    public void Update(ServerResponse resp) {
+    }
+
+    @Override
+    public void SendMsg(JSONObject jsonObject) throws IOException, IllegalArgumentException {
 
     }
 
     @Override
-    public void SendMsg(String msg) throws IOException, IllegalArgumentException {
-
-    }
-
-    @Override
-    public void run() {
+    public void ReceiveMsg() {
         try {
             InputStream inputStream = socket.getInputStream();
             byte[] byteArr = new byte[1024];
@@ -69,26 +62,9 @@ public class TCPService implements INetworkService<String>, Runnable {
                     System.out.println(e.getMessage());
                 }
             }
-            DecrementConnectedClients();
             System.out.println("Connection closed");
-            //Connection closed
         } catch (IOException e) {
             System.out.println("IOException. Error message: " + e.getMessage());
         }
     }
-
-    private void DecrementConnectedClients(){
-        synchronized (connectedClientsLock) {
-            connectedClients[0]--;
-        }
-    }
-
-    /*private synchronized boolean isThreadStopped() {
-        return this.isThreadStopped;
-    }
-
-    public synchronized void stopThread() throws IOException{
-        this.serverSocket.close();
-        this.isThreadStopped = true;
-    }*/
 }

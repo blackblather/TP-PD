@@ -2,13 +2,11 @@ package server.thread;
 
 import org.json.JSONObject;
 import server.controller.ServerController;
-import server.network.TCPService;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,8 +17,8 @@ public class NewClientsThread extends Thread {
     //Synchronization vars
     private boolean isThreadStopped = false;
     private final Integer maxClients = 2;
-    private ExecutorService tcpService = Executors.newFixedThreadPool(maxClients);
-    private int[] connectedClients = {0};
+    private ExecutorService clientService = Executors.newFixedThreadPool(maxClients);
+    private int[] connectedClients = {0};   //Pointer to int, because Integer class is immutable
     private final Object connectedClientsLock = new Object();
 
     public NewClientsThread(ServerSocket serverSocket, ServerController controller){
@@ -34,20 +32,20 @@ public class NewClientsThread extends Thread {
     @Override
     public void run() {
         //Created thread for accepting new clients
-        Socket tmpClientSocket;
+        Socket clientSocket;
         OutputStream outputStream;
         JSONObject JSONResponse;
         while (!isThreadStopped()){
             try {
-                tmpClientSocket = serverSocket.accept();
-                outputStream = tmpClientSocket.getOutputStream();
+                clientSocket = serverSocket.accept();
+                outputStream = clientSocket.getOutputStream();
                 if(ServerIsFull()){
                     JSONResponse = new JSONObject("{\"Response_Code\":0,\"Response_Description\":\"Server if full\"}");
                     outputStream.write(JSONResponse.toString().getBytes());
                 } else {
                     JSONResponse = new JSONObject("{\"Response_Code\":1,\"Response_Description\":\"Client accepted\"}");
                     outputStream.write(JSONResponse.toString().getBytes());
-                    tcpService.execute(new TCPService(tmpClientSocket, controller, connectedClientsLock, connectedClients));
+                    clientService.execute(new ClientThread(clientSocket, controller, connectedClientsLock, connectedClients));
                     IncrementConnectedClients();
                 }
             } catch (IOException e){
