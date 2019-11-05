@@ -1,14 +1,13 @@
 package server.network;
 
-import common.model.ServerResponse;
-import org.json.JSONObject;
+import common.model.Response;
+import common.observer.IObserver;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 
-public class UDPService implements INetworkService {
+public class UDPService implements INetworkService, IObserver {
     @Override
-    public void Update(ServerResponse resp) {
+    public void Update(Response resp) {
 
     }
 

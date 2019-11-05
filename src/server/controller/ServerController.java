@@ -1,29 +1,12 @@
 package server.controller;
 
-import common.model.ServerResponse;
-import server.network.INetworkService;
+import common.model.Response;
+import common.observable.Observable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ServerController implements IController {
-
-    private List<INetworkService> observers = new ArrayList<>();
+public class ServerController extends Observable implements IController{
 
     public ServerController(){
 
-    }
-
-    private void Notify(ServerResponse response){
-        if(response != null)
-            for (INetworkService observer : observers)
-                observer.Update(response);
-    }
-
-    public synchronized void AddObserver(INetworkService obs){
-        if(observers.contains(obs))
-            throw new IllegalArgumentException("Observer is already registered.");
-        observers.add(obs);
     }
 
     /********************** INTERFACE IMPLEMENTATION **********************/
@@ -32,7 +15,7 @@ public class ServerController implements IController {
         System.out.println("GOT LOGIN REQUEST:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
-        Notify(new ServerResponse(true, "Login", "Login Successful", ref));
+        Notify(new Response(true, "Login", "Login Successful", ref));
     }
 
     @Override
