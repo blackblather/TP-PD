@@ -1,6 +1,7 @@
 package server.network;
 
 import common.model.Response;
+import common.network.INetworkService;
 import common.observer.IObserver;
 
 import java.io.IOException;

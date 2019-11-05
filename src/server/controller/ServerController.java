@@ -1,9 +1,10 @@
 package server.controller;
 
+import common.controller.IController;
 import common.model.Response;
 import common.observable.Observable;
 
-public class ServerController extends Observable implements IController{
+public class ServerController extends Observable implements IController {
 
     public ServerController(){
 

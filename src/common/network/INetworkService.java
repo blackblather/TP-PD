@@ -1,4 +1,4 @@
-package server.network;
+package common.network;
 
 import java.io.IOException;
 

@@ -1,5 +1,6 @@
 package server.network;
 
+import common.network.INetworkService;
 import common.observer.IObserver;
 import org.json.JSONException;
 import org.json.JSONObject;

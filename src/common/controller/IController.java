@@ -1,6 +1,6 @@
-package server.controller;
+package common.controller;
 
-interface IController {
+public interface IController {
     void Login(Object ref, String username, String password);
     //INSERT OPERATIONS
     void AddMusic(Object ref, String username, String name, String author, String album, String year, String path);
