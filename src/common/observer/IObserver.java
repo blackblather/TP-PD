@@ -1,7 +1,5 @@
 package common.observer;
 
-import common.model.Response;
-
 public interface IObserver {
-    void Update(Response resp);
+    void Update(Object o);
 }
