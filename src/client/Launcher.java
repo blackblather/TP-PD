@@ -20,9 +20,5 @@ public class Launcher extends Application {
         //Set starting point here
         Login login = new Login(controller, window);
         login.Show();
-        Login login2 = new Login(controller, new Stage());
-        login2.Show();
-        Login login3 = new Login(controller, new Stage());
-        login3.Show();
     }
 }
