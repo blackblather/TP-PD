@@ -1,10 +1,9 @@
 package server.network;
 
 import common.network.INetworkService;
-import common.observer.IObserver;
+import common.observer.ControllerObserver;
 import org.json.JSONException;
 import org.json.JSONObject;
-import common.model.Response;
 import server.controller.ServerController;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class TCPService implements INetworkService, IObserver {
+public class TCPService extends ControllerObserver implements INetworkService {
     private Socket socket;
     private ServerController controller;
 
@@ -25,6 +24,7 @@ public class TCPService implements INetworkService, IObserver {
         this.controller.AddObserver(this);
     }
 
+    //TODO: controller.RouteMessage
     private void RouteMsg(String msg) throws JSONException{
         JSONObject jsonMsg = new JSONObject(msg);
         if(jsonMsg.has("Type") && jsonMsg.has("Content")){
@@ -46,9 +46,9 @@ public class TCPService implements INetworkService, IObserver {
     }
 
     @Override
-    public void Update(Response resp) {
-        if(resp.ref == this)
-            SendMsg("{\"response_success\":" + resp.success + ", \"response_type\":\"" + resp.type + "\", \"response_description\":\"" + resp.description + "\"}");
+    public void OnSuccessfulLogin(Object ref) {
+        if(ref == this)
+            SendMsg("{\"response_success\":true, \"response_type\":\"login\", \"response_description\":\"Very nice login\"}");
     }
 
     @Override

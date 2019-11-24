@@ -1,16 +1,9 @@
 package server.network;
 
-import common.model.Response;
 import common.network.INetworkService;
-import common.observer.IObserver;
-
 import java.io.IOException;
 
-public class UDPService implements INetworkService, IObserver {
-    @Override
-    public void Update(Response resp) {
-
-    }
+public class UDPService implements INetworkService {
 
     @Override
     public void SendMsg(String jsonStr) throws IOException, IllegalArgumentException {

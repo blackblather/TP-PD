@@ -1,17 +1,17 @@
 package server.network;
 
-import common.model.Response;
 import common.network.INetworkService;
-import common.observer.IObserver;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 
 /***
  * @author João Monteiro
  * Description: Provides mechanisms used for multicast communication between servers
  ***/
-public class MulticastService implements INetworkService, IObserver {
+public class MulticastService implements INetworkService {
     private final Integer MAX_PACKET_SIZE = 4000; //bytes
     private InetAddress  multicastAddr;
     private MulticastSocket multicastSocket;
@@ -28,11 +28,6 @@ public class MulticastService implements INetworkService, IObserver {
         multicastPort = port;
         multicastSocket = new MulticastSocket(port);
         multicastSocket.joinGroup(multicastAddr);
-    }
-
-    @Override
-    public void Update(Response resp) {
-
     }
 
     @Override

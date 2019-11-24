@@ -1,22 +1,20 @@
 package server.controller;
 
-import common.controller.IController;
-import common.model.Response;
-import common.observable.Observable;
+import common.observable.ObservableController;
 
-public class ServerController extends Observable implements IController {
+public class ServerController extends ObservableController {
 
     public ServerController(){
 
     }
 
-    /********************** INTERFACE IMPLEMENTATION **********************/
     @Override
     public synchronized void Login(Object ref, String username, String password) {
         System.out.println("GOT LOGIN REQUEST:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
-        Notify(new Response(true, "Login", "Login Successful", ref));
+        Notify(ref, NotificationType.successfulLogin);
+        //Notify(new Response(true, "Login", "Login Successful", ref));
     }
 
     @Override
