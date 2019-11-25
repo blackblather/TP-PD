@@ -1,9 +1,8 @@
 package server.network;
 
 import common.network.INetworkService;
-import common.observer.ControllerObserver;
+import common.observer.Observer;
 import org.json.JSONException;
-import org.json.JSONObject;
 import server.controller.ServerController;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class TCPService extends ControllerObserver implements INetworkService {
+public class TCPService extends Observer implements INetworkService {
     private Socket socket;
     private ServerController controller;
 
@@ -22,27 +21,6 @@ public class TCPService extends ControllerObserver implements INetworkService {
           be very careful that a reference to the object does not "leak" prematurely.
           Source: https://docs.oracle.com/javase/tutorial/essential/concurrency/syncmeth.html*/
         this.controller.AddObserver(this);
-    }
-
-    //TODO: controller.RouteMessage
-    private void RouteMsg(String msg) throws JSONException{
-        JSONObject jsonMsg = new JSONObject(msg);
-        if(jsonMsg.has("Type") && jsonMsg.has("Content")){
-            JSONObject jsonContent = jsonMsg.getJSONObject("Content");
-            switch(jsonMsg.getString("Type")){
-                case "Login": {
-                    if(jsonContent.has("username") && jsonContent.has("password"))
-                        controller.Login(this, jsonContent.getString("username"), jsonContent.getString("password"));             //LOGIN
-                    else
-                        throw new JSONException("JSON message format error.\nMissing one or more fields:\n - username\n - password");
-                } break;
-                case "AddMusic": {
-                    //TODO: Validations
-                } break;
-
-            }
-        } else
-            throw new JSONException("JSON message format error.\nMissing one or more fields:\n - Type\n - Content");
     }
 
     @Override
@@ -72,7 +50,7 @@ public class TCPService extends ControllerObserver implements INetworkService {
             while((bytesRead = inputStream.read(byteArr, 0, 1024)) > 0) {
                 String s = new String(byteArr, 0, bytesRead);
                 try {
-                    RouteMsg(s);
+                    controller.RouteJSONStr(s);
                 } catch (JSONException e){
                     System.out.println(e.getMessage());
                 }

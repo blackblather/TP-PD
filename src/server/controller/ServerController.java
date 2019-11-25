@@ -1,11 +1,34 @@
 package server.controller;
 
-import common.observable.ObservableController;
+import common.controller.Controller;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class ServerController extends ObservableController {
+public class ServerController extends Controller {
 
     public ServerController(){
 
+    }
+
+    @Override
+    public synchronized void RouteJSONStr(String jsonStr) throws JSONException {
+        JSONObject jsonMsg = new JSONObject(jsonStr);
+        if(jsonMsg.has("Type") && jsonMsg.has("Content")){
+            JSONObject jsonContent = jsonMsg.getJSONObject("Content");
+            switch(jsonMsg.getString("Type")){
+                case "Login": {
+                    if(jsonContent.has("username") && jsonContent.has("password"))
+                        Login(this, jsonContent.getString("username"), jsonContent.getString("password"));             //LOGIN
+                    else
+                        throw new JSONException("JSON message format error.\nMissing one or more fields:\n - username\n - password");
+                } break;
+                case "AddMusic": {
+                    //TODO: Validations
+                } break;
+
+            }
+        } else
+            throw new JSONException("JSON message format error.\nMissing one or more fields:\n - Type\n - Content");
     }
 
     @Override

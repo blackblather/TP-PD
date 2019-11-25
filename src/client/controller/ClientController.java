@@ -1,27 +1,56 @@
 package client.controller;
 
 import client.network.TCPService;
-import common.observable.ObservableController;
-import common.observer.IObserver;
+import common.controller.Controller;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientController extends ObservableController implements IObserver {
+public class ClientController extends Controller {
     private TCPService tcpService;
 
     public ClientController(){
-        tcpService = new TCPService(new Socket());
-        tcpService.AddObserver(this);
+        tcpService = new TCPService(new Socket(), this);
+    }
+
+    @Override
+    public void RouteJSONStr(String jsonStr) throws JSONException {
+        //Example: {"Type":"Login","Content":{"username":"blackBladder","password":"blueNails"}}
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        if (IsValidJSONFormat(jsonObject)) {
+            switch (jsonObject.getString("Type")) {
+                case "Login": {
+                    Notify(NotificationType.successfulLogin);
+                }
+                break;
+                case "AddMusic": {/*TODO*/}
+                break;
+                case "AddPlaylist": {/*TODO*/}
+                break;
+                case "AddUser": {/*TODO*/}
+                break;
+                case "RemoveMusic": {/*TODO*/}
+                break;
+                case "RemovePlaylist": {/*TODO*/}
+                break;
+                case "GetMusics": {/*TODO*/}
+                break;
+                case "GetMusic": {/*TODO*/}
+                break;
+                case "GetPlaylists": {/*TODO*/}
+                break;
+                case "GetPlaylist": {/*TODO*/}
+                break;
+            }
+        }
     }
 
     @Override
     public void Login(Object ref, String username, String password) {
         //Convert to JSONObject
-        StringBuilder sb = new StringBuilder();
-        String jsonStr = sb.append("{\"username\":\"").append(username).append("\",")
-                            .append("\"password\":\"").append(password).append("\"}").toString();
+        String jsonStr = "{\"username\":\"" + username + "\"," + "\"password\":\"" + password + "\"}";
         try{
             tcpService.SendMsg(jsonStr);
         } catch (IOException e) {
@@ -74,10 +103,4 @@ public class ClientController extends ObservableController implements IObserver 
 
     }
 
-    @Override
-    public void Update(Object o) {
-        if (o instanceof JSONObject) {
-            Notify(NotificationType.successfulLogin);
-        }
-    }
 }
