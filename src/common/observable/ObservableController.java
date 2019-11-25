@@ -17,4 +17,8 @@ public abstract class ObservableController extends Observable<IControllerObserve
             }
         }
     }
+
+    protected void Notify(NotificationType type){
+        Notify(null, type);
+    }
 }

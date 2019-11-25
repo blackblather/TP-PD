@@ -77,7 +77,7 @@ public class ClientController extends ObservableController implements IObserver 
     @Override
     public void Update(Object o) {
         if (o instanceof JSONObject) {
-            Notify(null, NotificationType.successfulLogin);
+            Notify(NotificationType.successfulLogin);
         }
     }
 }
