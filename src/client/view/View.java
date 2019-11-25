@@ -1,11 +1,11 @@
 package client.view;
 
 import common.controller.Controller;
-import common.observer.Observer;
+import common.observer.IObserver;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public abstract class View extends Observer {
+public abstract class View implements IObserver {
     Controller controller;
     Stage window;
 
@@ -20,4 +20,13 @@ public abstract class View extends Observer {
         if(!window.isShowing())
             window.show();
     }
+
+    @Override
+    public void Update(Object o) { }
+
+    @Override
+    public void OnSuccessfulLogin(Object ref) { }
+
+    @Override
+    public void OnFailedLogin(Object ref) { }
 }
