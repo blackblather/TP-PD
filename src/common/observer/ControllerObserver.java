@@ -1,6 +1,6 @@
 package common.observer;
 
-public class ControllerObserver implements IControllerObserver {
+public abstract class ControllerObserver implements IControllerObserver {
     @Override
     public void Update(Object o) { }
 
