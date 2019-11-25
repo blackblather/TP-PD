@@ -2,16 +2,15 @@ package client;
 
 import client.controller.ClientController;
 import client.view.Login;
-import common.observable.ObservableController;
+import common.controller.Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import server.controller.ServerController;
 
 public class Launcher extends Application {
-    private ObservableController controller = new ServerController();
+    private Controller controller = new ClientController();
 
     public static void main(String [] args){
-        //TODO: Conexão
+        //TODO: Conexão com DS
         launch(args);
     }
 

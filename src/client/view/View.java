@@ -1,15 +1,15 @@
 package client.view;
 
-import common.observable.ObservableController;
-import common.observer.ControllerObserver;
+import common.controller.Controller;
+import common.observer.Observer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public abstract class View extends ControllerObserver {
-    ObservableController controller;
+public abstract class View extends Observer {
+    Controller controller;
     Stage window;
 
-    View(ObservableController clientController){
+    View(Controller clientController){
         this.controller = clientController;
     }
 

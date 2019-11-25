@@ -1,11 +1,9 @@
 package client.view;
 
-import common.observable.ObservableController;
-import javafx.geometry.HPos;
+import common.controller.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,7 +16,7 @@ import javafx.stage.Stage;
 
 public class Login extends View{
 
-    public Login(ObservableController controller, Stage window) {
+    public Login(Controller controller, Stage window) {
         super(controller);
         this.window = window;
         controller.AddObserver(this);
