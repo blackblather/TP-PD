@@ -1,7 +1,7 @@
 package client.controller;
 
-import client.network.TCPService;
 import common.controller.Controller;
+import common.network.TCPService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,33 +16,23 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void RouteJSONStr(String jsonStr) throws JSONException {
+    public void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
         //Example: {"Type":"Login","Content":{"username":"blackBladder","password":"blueNails"}}
         JSONObject jsonObject = new JSONObject(jsonStr);
         if (IsValidJSONFormat(jsonObject)) {
             switch (jsonObject.getString("Type")) {
                 case "Login": {
                     Notify(NotificationType.successfulLogin);
-                }
-                break;
-                case "AddMusic": {/*TODO*/}
-                break;
-                case "AddPlaylist": {/*TODO*/}
-                break;
-                case "AddUser": {/*TODO*/}
-                break;
-                case "RemoveMusic": {/*TODO*/}
-                break;
-                case "RemovePlaylist": {/*TODO*/}
-                break;
-                case "GetMusics": {/*TODO*/}
-                break;
-                case "GetMusic": {/*TODO*/}
-                break;
-                case "GetPlaylists": {/*TODO*/}
-                break;
-                case "GetPlaylist": {/*TODO*/}
-                break;
+                } break;
+                case "AddMusic": {/*TODO*/} break;
+                case "AddPlaylist": {/*TODO*/} break;
+                case "AddUser": {/*TODO*/} break;
+                case "RemoveMusic": {/*TODO*/} break;
+                case "RemovePlaylist": {/*TODO*/} break;
+                case "GetMusics": {/*TODO*/} break;
+                case "GetMusic": {/*TODO*/} break;
+                case "GetPlaylists": {/*TODO*/} break;
+                case "GetPlaylist": {/*TODO*/} break;
             }
         }
     }
@@ -53,7 +43,7 @@ public class ClientController extends Controller {
         String jsonStr = "{\"username\":\"" + username + "\"," + "\"password\":\"" + password + "\"}";
         try{
             tcpService.SendMsg(jsonStr);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

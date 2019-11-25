@@ -1,6 +1,6 @@
 package client.thread;
 
-import client.network.TCPService;
+import common.network.TCPService;
 
 public class TCPThread extends Thread {
     private TCPService tcpService;

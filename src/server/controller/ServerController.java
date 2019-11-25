@@ -11,24 +11,25 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void RouteJSONStr(String jsonStr) throws JSONException {
-        JSONObject jsonMsg = new JSONObject(jsonStr);
-        if(jsonMsg.has("Type") && jsonMsg.has("Content")){
-            JSONObject jsonContent = jsonMsg.getJSONObject("Content");
-            switch(jsonMsg.getString("Type")){
+    public synchronized void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
+        JSONObject jsonObject = new JSONObject(jsonStr);
+        if (IsValidJSONFormat(jsonObject)) {
+            JSONObject jsonContent = jsonObject.getJSONObject("Content");
+            switch (jsonObject.getString("Type")) {
                 case "Login": {
-                    if(jsonContent.has("username") && jsonContent.has("password"))
-                        Login(this, jsonContent.getString("username"), jsonContent.getString("password"));             //LOGIN
-                    else
-                        throw new JSONException("JSON message format error.\nMissing one or more fields:\n - username\n - password");
+                    Login(ref, jsonContent.getString("username"), jsonContent.getString("password"));
                 } break;
-                case "AddMusic": {
-                    //TODO: Validations
-                } break;
-
+                case "AddMusic": {/*TODO*/} break;
+                case "AddPlaylist": {/*TODO*/} break;
+                case "AddUser": {/*TODO*/} break;
+                case "RemoveMusic": {/*TODO*/} break;
+                case "RemovePlaylist": {/*TODO*/} break;
+                case "GetMusics": {/*TODO*/} break;
+                case "GetMusic": {/*TODO*/} break;
+                case "GetPlaylists": {/*TODO*/} break;
+                case "GetPlaylist": {/*TODO*/} break;
             }
-        } else
-            throw new JSONException("JSON message format error.\nMissing one or more fields:\n - Type\n - Content");
+        }
     }
 
     @Override
@@ -37,7 +38,6 @@ public class ServerController extends Controller {
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
         Notify(ref, NotificationType.successfulLogin);
-        //Notify(new Response(true, "Login", "Login Successful", ref));
     }
 
     @Override

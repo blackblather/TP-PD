@@ -3,7 +3,7 @@ package common.controller;
 import org.json.JSONException;
 
 public interface IController {
-    void RouteJSONStr(String jsonStr) throws JSONException;
+    void RouteJSONStr(Object ref, String jsonStr) throws JSONException;
     void Login(Object ref, String username, String password);
     //INSERT OPERATIONS
     void AddMusic(Object ref, String username, String name, String author, String album, String year, String path);
