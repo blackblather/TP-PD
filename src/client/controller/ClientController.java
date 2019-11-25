@@ -15,11 +15,15 @@ public class ClientController extends Controller {
         tcpService = new TCPService(new Socket(), this);
     }
 
+    private boolean IsValidJSONResponse(JSONObject jsonObject){
+        return true;
+    }
+
     @Override
     public void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
         //Example: {"Type":"Login","Content":{"username":"blackBladder","password":"blueNails"}}
         JSONObject jsonObject = new JSONObject(jsonStr);
-        if (IsValidJSONFormat(jsonObject)) {
+        if (IsValidJSONResponse(jsonObject)) {
             switch (jsonObject.getString("Type")) {
                 case "Login": {
                     Notify(NotificationType.successfulLogin);

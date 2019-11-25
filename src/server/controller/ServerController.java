@@ -10,10 +10,14 @@ public class ServerController extends Controller {
 
     }
 
+    private boolean IsValidJSONRRequest(JSONObject jsonObject){
+        return true;
+    }
+
     @Override
     public synchronized void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonStr);
-        if (IsValidJSONFormat(jsonObject)) {
+        if (IsValidJSONRRequest(jsonObject)) {
             JSONObject jsonContent = jsonObject.getJSONObject("Content");
             switch (jsonObject.getString("Type")) {
                 case "Login": {
