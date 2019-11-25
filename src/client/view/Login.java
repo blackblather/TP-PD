@@ -1,16 +1,22 @@
 package client.view;
 
 import common.observable.ObservableController;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Login extends View{
-    private TextField txtResp;
 
     public Login(ObservableController controller, Stage window) {
         super(controller);
@@ -20,10 +26,24 @@ public class Login extends View{
 
     @Override
     public Scene GetScene() {
+        //Create root
+        FlowPane root = new FlowPane(Orientation.VERTICAL);
 
-        VBox root = new VBox(10);
-        Scene scene = new Scene(root, 200, 200);
+        //Create scene
+        Scene scene = new Scene(root, 200, 170);
         scene.setFill(Color.WHITE);
+
+        //Create root elements
+        VBox vBox = new VBox(10);
+        HBox hBox = new HBox(10);
+
+        //Stylizes vBox
+        vBox.setPrefWidth(scene.getWidth());
+        vBox.setPrefHeight(scene.getHeight());
+        vBox.setPadding(new Insets(10,10,10,10));
+
+        //Align hBox's content
+        hBox.setAlignment(Pos.CENTER_RIGHT);
 
         //Label - Username
         Label lblUsername = new Label("Insert username:");
@@ -43,21 +63,34 @@ public class Login extends View{
             controller.Login(null, txtUsername.getText(), txtPassword.getText());
         });
 
-        txtResp = new TextField();
+        //Button - Register
+        Button btnRegister = new Button("Register");
+        btnLogin.setOnAction(event -> {
+        });
 
-        //Add children to root
-        root.getChildren().addAll(lblUsername,
+        //Add children to hBox
+        hBox.getChildren().addAll(btnLogin,
+                                  btnRegister);
+
+        //Add children to vBox
+        vBox.getChildren().addAll(lblUsername,
                                   txtUsername,
                                   lblPassword,
                                   txtPassword,
-                                  btnLogin,
-                                  txtResp);
+                                  hBox);
+
+        root.getChildren().add(vBox);
 
         return scene;
     }
 
     @Override
     public void OnSuccessfulLogin(Object ref) {
-        txtResp.setText("VERY GOOD LOGIN");
+
+    }
+
+    @Override
+    public void OnFailedLogin(Object ref) {
+
     }
 }
