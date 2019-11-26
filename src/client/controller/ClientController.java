@@ -1,6 +1,6 @@
 package client.controller;
 
-import client.thread.ServerResponseThread;
+import client.thread.ReadResponseThread;
 import common.controller.Controller;
 import common.network.TCPService;
 import org.json.JSONException;
@@ -15,8 +15,8 @@ public class ClientController extends Controller {
     public ClientController(){
         try {
             tcpService = new TCPService(new Socket("localhost", 6002), this);
-            ServerResponseThread serverResponseThread = new ServerResponseThread(tcpService);
-            serverResponseThread.start();
+            ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
+            readResponseThread.start();
         } catch (IOException e) {
             e.printStackTrace();
         }

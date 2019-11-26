@@ -2,10 +2,10 @@ package client.thread;
 
 import common.network.TCPService;
 
-public class ServerResponseThread extends Thread {
+public class ReadResponseThread extends Thread {
     private TCPService tcpService;
 
-    public ServerResponseThread(TCPService tcpService){
+    public ReadResponseThread(TCPService tcpService){
         this.tcpService = tcpService;
     }
 
