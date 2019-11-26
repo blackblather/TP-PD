@@ -20,8 +20,7 @@ public class TCPService implements INetworkService {
     @Override
     public void SendMsg(String jsonStr) throws IllegalArgumentException, IOException {
         OutputStream outputStream = socket.getOutputStream();
-        byte[] byteArr = jsonStr.getBytes();
-        outputStream.write(byteArr);
+        outputStream.write(jsonStr.getBytes());
         outputStream.flush();
     }
 

@@ -1,5 +1,6 @@
 package server.network;
 
+import common.controller.Controller;
 import common.network.INetworkService;
 import java.io.IOException;
 
