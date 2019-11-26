@@ -1,10 +1,12 @@
 package client.view;
 
 import common.controller.Controller;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -63,7 +65,7 @@ public class Login extends View{
 
         //Button - Register
         Button btnRegister = new Button("Register");
-        btnLogin.setOnAction(event -> {
+        btnRegister.setOnAction(event -> {
         });
 
         //Add children to hBox
@@ -84,7 +86,16 @@ public class Login extends View{
 
     @Override
     public void OnSuccessfulLogin(Object ref) {
+        Platform.runLater(
+            () -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("YE BOYEEEEEEEEEEEEEEEEEE");
+                alert.setHeaderText("Look, an Information Dialog");
+                alert.setContentText("LOGIN FUCKING SUCCESSFUL!");
 
+                alert.showAndWait();
+            }
+        );
     }
 
     @Override

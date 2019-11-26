@@ -24,7 +24,7 @@ public class TCPService extends common.network.TCPService implements IObserver {
     public void OnSuccessfulLogin(Object ref) {
         if (ref == this) {
             try {
-                SendMsg("{\"response_success\":true, \"response_type\":\"login\", \"response_description\":\"Very nice login\"}");
+                SendMsg("{\"Type\":\"Login\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.thread.ServerResponseThread;
 import common.controller.Controller;
 import common.network.TCPService;
 import org.json.JSONException;
@@ -12,7 +13,13 @@ public class ClientController extends Controller {
     private TCPService tcpService;
 
     public ClientController(){
-        tcpService = new TCPService(new Socket(), this);
+        try {
+            tcpService = new TCPService(new Socket("localhost", 6002), this);
+            ServerResponseThread serverResponseThread = new ServerResponseThread(tcpService);
+            serverResponseThread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean IsValidJSONResponse(JSONObject jsonObject){
@@ -44,7 +51,7 @@ public class ClientController extends Controller {
     @Override
     public void Login(Object ref, String username, String password) {
         //Convert to JSONObject
-        String jsonStr = "{\"username\":\"" + username + "\"," + "\"password\":\"" + password + "\"}";
+        String jsonStr = "{\"Type\":\"Login\",\"Content\":{\"username\":\""+username+"\",\"password\":\""+password+"\"}}";
         try{
             tcpService.SendMsg(jsonStr);
         } catch (IOException | IllegalArgumentException e) {
