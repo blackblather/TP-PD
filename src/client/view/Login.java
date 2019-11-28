@@ -99,7 +99,16 @@ public class Login extends View{
     }
 
     @Override
-    public void OnFailedLogin(Object ref) {
+    public void OnInvalidCredentials(Object ref) {
+        Platform.runLater(
+                () -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("OH NOOOOOOOOOO");
+                    alert.setHeaderText("NOOOOOOOOOO NOOOOOOOOOO NOOOOOOOOOO");
+                    alert.setContentText("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
+                    alert.showAndWait();
+                }
+        );
     }
 }

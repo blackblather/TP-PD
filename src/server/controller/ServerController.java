@@ -41,7 +41,7 @@ public class ServerController extends Controller {
         System.out.println("GOT LOGIN REQUEST:");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
-        Notify(ref, NotificationType.successfulLogin);
+        Notify(ref, NotificationType.invalidCredentials);
     }
 
     @Override
