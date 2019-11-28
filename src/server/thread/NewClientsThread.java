@@ -5,6 +5,7 @@ import server.controller.ServerController;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -33,18 +34,21 @@ public class NewClientsThread extends Thread {
     public void run() {
         //Created thread for accepting new clients
         Socket clientSocket;
-        OutputStream outputStream;
-        JSONObject JSONResponse;
+        PrintWriter printWriter;
+        String jsonResponse;
         while (!isThreadStopped()){
             try {
                 clientSocket = serverSocket.accept();
-                outputStream = clientSocket.getOutputStream();
+                printWriter = new PrintWriter(clientSocket.getOutputStream());
                 if(ServerIsFull()){
-                    JSONResponse = new JSONObject("{\"Response_Code\":0,\"Response_Description\":\"Server if full\"}");
-                    outputStream.write(JSONResponse.toString().getBytes());
+                    jsonResponse = "{\"Type\":\"ServerStatus\",\"Status\":0}";
+                    printWriter.println(jsonResponse);
+                    printWriter.flush();
+                    clientSocket.close();
                 } else {
-                    JSONResponse = new JSONObject("{\"Response_Code\":1,\"Response_Description\":\"Client accepted\"}");
-                    outputStream.write(JSONResponse.toString().getBytes());
+                    jsonResponse = "{\"Type\":\"ServerStatus\",\"Status\":1}";
+                    printWriter.println(jsonResponse);
+                    printWriter.flush();
                     clientService.execute(new ClientRunnable(clientSocket, controller, connectedClientsLock, connectedClients));
                     IncrementConnectedClients();
                 }
