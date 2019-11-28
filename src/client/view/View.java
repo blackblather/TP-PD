@@ -7,18 +7,29 @@ import javafx.stage.Stage;
 
 public abstract class View implements IObserver {
     Controller controller;
-    Stage window;
+    private Stage window;
 
-    View(Controller clientController){
-        this.controller = clientController;
+    View(Controller controller, Stage window){
+        this.controller = controller;
+        this.window = window;
+        controller.AddObserver(this);
     }
 
     public abstract Scene GetScene();
 
     public void Show(){
-        window.setScene(GetScene());
+        SetScene(GetScene());
         if(!window.isShowing())
             window.show();
+    }
+
+    public void SetScene(Scene scene){
+        window.setScene(scene);
+    }
+
+    public void Destroy(){
+        window.close();
+        controller.RemoveObserver(this);
     }
 
     @Override
