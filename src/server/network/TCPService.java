@@ -42,4 +42,9 @@ public class TCPService extends common.network.TCPService implements IObserver {
             }
         }
     }
+
+    @Override
+    public void OnAccountCreated(Object ref) {
+
+    }
 }

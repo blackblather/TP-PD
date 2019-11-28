@@ -40,4 +40,7 @@ public abstract class View implements IObserver {
 
     @Override
     public void OnInvalidCredentials(Object ref) { }
+
+    @Override
+    public void OnAccountCreated(Object ref) { }
 }
