@@ -13,13 +13,7 @@ public class ClientController extends Controller {
     private TCPService tcpService;
 
     public ClientController(){
-        try {
-            tcpService = new TCPService(new Socket("localhost", 6002), this);
-            ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
-            readResponseThread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private boolean IsValidJSONResponse(JSONObject jsonObject){
@@ -32,10 +26,14 @@ public class ClientController extends Controller {
         JSONObject jsonObject = new JSONObject(jsonStr);
         if (IsValidJSONResponse(jsonObject)) {
             switch (jsonObject.getString("Type")) {
+                case "ServerStatus": { /*TODO*/ } break;
                 case "Login": {
-                    Notify(NotificationType.successfulLogin);
+                    if(jsonObject.getBoolean("Success"))
+                        Notify(NotificationType.successfulLogin);
+                    else
+                        Notify(NotificationType.invalidCredentials);
                 } break;
-                case "AddMusic": {/*TODO*/} break;
+                case "AddMusic": { /*TDO*/ } break;
                 case "AddPlaylist": {/*TODO*/} break;
                 case "AddUser": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
@@ -53,9 +51,12 @@ public class ClientController extends Controller {
         //Convert to JSONObject
         String jsonStr = "{\"Type\":\"Login\",\"Content\":{\"username\":\""+username+"\",\"password\":\""+password+"\"}}";
         try{
+            tcpService = new TCPService(new Socket("localhost", 6002), this);
             tcpService.SendMsg(jsonStr);
+            ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
+            readResponseThread.start();
         } catch (IOException | IllegalArgumentException e) {
-            e.printStackTrace();
+            Notify(NotificationType.invalidCredentials);
         }
     }
 
