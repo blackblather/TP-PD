@@ -3,37 +3,35 @@ package common.network;
 import common.controller.Controller;
 import org.json.JSONException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class TCPService implements INetworkService {
-    private Socket socket;
+    protected Socket socket;
     protected Controller controller;
+    private PrintWriter printWriter;
+    private BufferedReader bufferedReader;
 
-    public TCPService(Socket socket, Controller controller) throws IllegalArgumentException{
+    public TCPService(Socket socket, Controller controller) throws IllegalArgumentException, IOException {
         this.socket = socket;
         this.controller = controller;
+        printWriter = new PrintWriter(socket.getOutputStream());
+        bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     @Override
     public void SendMsg(String jsonStr) throws IllegalArgumentException, IOException {
-        OutputStream outputStream = socket.getOutputStream();
-        outputStream.write(jsonStr.getBytes());
-        outputStream.flush();
+        printWriter.println(jsonStr);
+        printWriter.flush();
     }
 
     @Override
     public void ReceiveMsg() {
         try {
-            InputStream inputStream = socket.getInputStream();
-            byte[] byteArr = new byte[1024];
-            int bytesRead;
-            while((bytesRead = inputStream.read(byteArr, 0, 1024)) > 0) {
-                String s = new String(byteArr, 0, bytesRead);
+            String jsonString;
+            while((jsonString = bufferedReader.readLine()) != null) {
                 try {
-                    controller.RouteJSONStr(this, s);
+                    controller.RouteJSONStr(this, jsonString);
                 } catch (JSONException e){
                     System.out.println(e.getMessage());
                 }
