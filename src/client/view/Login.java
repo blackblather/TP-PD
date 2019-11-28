@@ -101,14 +101,14 @@ public class Login extends View{
     @Override
     public void OnInvalidCredentials(Object ref) {
         Platform.runLater(
-                () -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("An error occurred");
-                    alert.setHeaderText("Invalid credentials.");
-                    alert.setContentText("Username and/or password are invalid");
+            () -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("An error occurred");
+                alert.setHeaderText("Invalid credentials.");
+                alert.setContentText("Username and/or password are invalid");
 
-                    alert.showAndWait();
-                }
+                alert.showAndWait();
+            }
         );
     }
 }
