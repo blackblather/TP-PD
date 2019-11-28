@@ -61,7 +61,7 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public synchronized void Register(Object ref, String username, String password) {
+    public synchronized void Register(Object ref, String username, String password, String passwordConf) {
 
     }
 
