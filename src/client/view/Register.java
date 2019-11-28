@@ -46,13 +46,13 @@ public class Register extends View {
         hBox.setAlignment(Pos.CENTER_RIGHT);
 
         //Label - Username
-        Label lblUsername = new Label("Insert username:");
+        Label lblUsername = new Label("Username:");
 
         //Textbox - Username
         TextField txtUsername = new TextField();
 
         //Label - Password
-        Label lblPassword = new Label("Insert password:");
+        Label lblPassword = new Label("Password:");
 
         //Textbox - Password
         PasswordField txtPassword = new PasswordField();
