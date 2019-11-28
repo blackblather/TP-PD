@@ -3,15 +3,19 @@ package client.view;
 import common.controller.Controller;
 import common.observer.IObserver;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public abstract class View implements IObserver {
+    private final String APP_NAME = "Musify";
+
     Controller controller;
     private Stage window;
 
     View(Controller controller, Stage window){
         this.controller = controller;
         this.window = window;
+        this.window.getIcons().add(new Image("client/res/icon.png"));
         controller.AddObserver(this);
     }
 
@@ -30,6 +34,10 @@ public abstract class View implements IObserver {
     public void Destroy(){
         window.close();
         controller.RemoveObserver(this);
+    }
+
+    public void SetTitle(String title){
+        window.setTitle(APP_NAME + " - " + title);
     }
 
     @Override

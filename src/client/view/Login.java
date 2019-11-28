@@ -14,10 +14,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Login extends View{
-
     public Login(Controller controller, Stage window) {
         super(controller, window);
-        window.setTitle("Login");
+        SetTitle("Login");
     }
 
     @Override

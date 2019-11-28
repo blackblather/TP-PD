@@ -21,7 +21,7 @@ public class Register extends View {
     Register(Controller controller, Stage window) {
         super(controller, window);
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Register");
+        SetTitle("Register");
     }
 
     @Override
@@ -30,7 +30,7 @@ public class Register extends View {
         FlowPane root = new FlowPane(Orientation.VERTICAL);
 
         //Create scene
-        Scene scene = new Scene(root, 250, 170);
+        Scene scene = new Scene(root, 270, 230);
         scene.setFill(Color.WHITE);
 
         //Create root elements
