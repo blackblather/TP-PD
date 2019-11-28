@@ -28,5 +28,5 @@ public abstract class View implements IObserver {
     public void OnSuccessfulLogin(Object ref) { }
 
     @Override
-    public void OnFailedLogin(Object ref) { }
+    public void OnInvalidCredentials(Object ref) { }
 }
