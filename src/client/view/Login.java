@@ -18,10 +18,8 @@ import javafx.stage.Stage;
 
 public class Login extends View{
 
-    public Login(Controller controller, Stage window) {
-        super(controller);
-        this.window = window;
-        controller.AddObserver(this);
+    Login(Controller controller, Stage window) {
+        super(controller, window);
     }
 
     @Override
