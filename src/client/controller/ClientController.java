@@ -61,17 +61,17 @@ public class ClientController extends Controller {
     }
 
     @Override
+    public synchronized void Register(Object ref, String username, String password) {
+
+    }
+
+    @Override
     public void AddMusic(Object ref, String username, String name, String author, String album, String year, String path) {
 
     }
 
     @Override
     public void AddPlaylist(Object ref, String username, String name) {
-
-    }
-
-    @Override
-    public void AddUser(Object ref, String username, String password) {
 
     }
 

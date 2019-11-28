@@ -5,10 +5,10 @@ import org.json.JSONException;
 public interface IController {
     void RouteJSONStr(Object ref, String jsonStr) throws JSONException;
     void Login(Object ref, String username, String password);
+    void Register(Object ref, String username, String password);
     //INSERT OPERATIONS
     void AddMusic(Object ref, String username, String name, String author, String album, String year, String path);
     void AddPlaylist(Object ref, String username, String name);
-    void AddUser(Object ref, String username, String password);
     //DELETE OPERATIONS
     void RemoveMusic(Object ref, String name);
     void RemovePlaylist(Object ref, String name);

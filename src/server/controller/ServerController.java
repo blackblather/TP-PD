@@ -45,17 +45,17 @@ public class ServerController extends Controller {
     }
 
     @Override
+    public synchronized void Register(Object ref, String username, String password) {
+
+    }
+
+    @Override
     public synchronized void AddMusic(Object ref, String username, String name, String author, String album, String year, String path) {
 
     }
 
     @Override
     public synchronized void AddPlaylist(Object ref, String username, String name) {
-
-    }
-
-    @Override
-    public synchronized void AddUser(Object ref, String username, String password) {
 
     }
 
