@@ -6,10 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -54,7 +51,7 @@ public class Login extends View{
         Label lblPassword = new Label("Insert password:");
 
         //Textbox - Password
-        TextField txtPassword = new TextField();
+        PasswordField txtPassword = new PasswordField();
 
         //Button - Register
         Button btnRegister = new Button("Register");

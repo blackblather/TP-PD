@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -54,13 +55,13 @@ public class Register extends View {
         Label lblPassword = new Label("Insert password:");
 
         //Textbox - Password
-        TextField txtPassword = new TextField();
+        PasswordField txtPassword = new PasswordField();
 
         //Label - Password
         Label lblPasswordConf = new Label("Confirm password:");
 
         //Textbox - Password
-        TextField txtPasswordConf = new TextField();
+        PasswordField txtPasswordConf = new PasswordField();
 
         //Button - Register
         Button btnRegister = new Button("Register");
