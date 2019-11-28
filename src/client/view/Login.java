@@ -18,8 +18,9 @@ import javafx.stage.Stage;
 
 public class Login extends View{
 
-    Login(Controller controller, Stage window) {
+    public Login(Controller controller, Stage window) {
         super(controller, window);
+        window.setTitle("Login");
     }
 
     @Override
@@ -28,7 +29,7 @@ public class Login extends View{
         FlowPane root = new FlowPane(Orientation.VERTICAL);
 
         //Create scene
-        Scene scene = new Scene(root, 200, 170);
+        Scene scene = new Scene(root, 250, 170);
         scene.setFill(Color.WHITE);
 
         //Create root elements
@@ -55,20 +56,22 @@ public class Login extends View{
         //Textbox - Password
         TextField txtPassword = new TextField();
 
+        //Button - Register
+        Button btnRegister = new Button("Register");
+        btnRegister.setOnAction(event -> {
+            Register register = new Register(controller, new Stage());
+            register.Show();
+        });
+
         //Button - Login
         Button btnLogin = new Button("Login");
         btnLogin.setOnAction(event -> {
             controller.Login(null, txtUsername.getText(), txtPassword.getText());
         });
 
-        //Button - Register
-        Button btnRegister = new Button("Register");
-        btnRegister.setOnAction(event -> {
-        });
-
         //Add children to hBox
-        hBox.getChildren().addAll(btnLogin,
-                                  btnRegister);
+        hBox.getChildren().addAll(btnRegister,
+                                  btnLogin);
 
         //Add children to vBox
         vBox.getChildren().addAll(lblUsername,
