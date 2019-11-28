@@ -103,9 +103,9 @@ public class Login extends View{
         Platform.runLater(
                 () -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("OH NOOOOOOOOOO");
-                    alert.setHeaderText("NOOOOOOOOOO NOOOOOOOOOO NOOOOOOOOOO");
-                    alert.setContentText("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                    alert.setTitle("An error occurred");
+                    alert.setHeaderText("Invalid credentials.");
+                    alert.setContentText("Username and/or password are invalid");
 
                     alert.showAndWait();
                 }
