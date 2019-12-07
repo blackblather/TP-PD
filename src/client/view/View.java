@@ -2,11 +2,9 @@ package client.view;
 
 import common.controller.Controller;
 import common.observer.IObserver;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public abstract class View implements IObserver {
     private final String APP_NAME = "Musify";
