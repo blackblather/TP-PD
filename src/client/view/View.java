@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public abstract class View implements IObserver {
-    private final String APP_NAME = "Musify";
 
     Controller controller;
     private Stage window;
@@ -30,17 +29,12 @@ public abstract class View implements IObserver {
             window.show();
     }
 
-    public void SetScene(Scene scene){
+    private void SetScene(Scene scene){
         window.setScene(scene);
     }
 
-    public void Destroy(){
-        window.close();
-        controller.RemoveObserver(this);
-    }
-
-    public void SetTitle(String title){
-        window.setTitle(APP_NAME + " - " + title);
+    void SetTitle(String title){
+        window.setTitle("Musify - " + title);
     }
 
     @Override
