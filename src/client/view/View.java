@@ -47,5 +47,8 @@ public abstract class View implements IObserver {
     public void OnInvalidCredentials(Object ref) { }
 
     @Override
-    public void OnAccountCreated(Object ref) { }
+    public void OnRegisterSuccess(Object ref) { }
+
+    @Override
+    public void OnRegisterError(Object ref) { }
 }

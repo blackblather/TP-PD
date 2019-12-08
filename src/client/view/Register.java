@@ -1,14 +1,12 @@
 package client.view;
 
 import common.controller.Controller;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -87,7 +85,30 @@ public class Register extends View {
     }
 
     @Override
-    public void OnAccountCreated(Object ref) {
+    public void OnRegisterSuccess(Object ref) {
+        Platform.runLater(
+                () -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("YE BOYEEEEEEEEEEEEEEEEEE");
+                    alert.setHeaderText("Look, an Information Dialog");
+                    alert.setContentText("REGISTER FUCKING SUCCESSFUL!");
 
+                    alert.showAndWait();
+                }
+        );
+    }
+
+    @Override
+    public void OnRegisterError(Object ref) {
+        Platform.runLater(
+                () -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("An error occurred");
+                    alert.setHeaderText("Invalid credentials.");
+                    alert.setContentText("An error occurred while trying to register your account");
+
+                    alert.showAndWait();
+                }
+        );
     }
 }

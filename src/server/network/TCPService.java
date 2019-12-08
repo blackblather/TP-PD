@@ -44,7 +44,25 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnAccountCreated(Object ref) {
+    public void OnRegisterSuccess(Object ref) {
+        if (ref == this) {
+            try {
+                SendMsg("{\"Type\":\"Register\", \"Success\":true}");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    @Override
+    public void OnRegisterError(Object ref) {
+        if (ref == this) {
+            try {
+                SendMsg("{\"Type\":\"Register\", \"Success\":false}");
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
