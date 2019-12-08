@@ -1,5 +1,6 @@
 package server.controller;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import common.controller.Controller;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +10,7 @@ import java.sql.*;
 /*NOTA: A implementação desta classe ServerController não tem em consideração questões de segurança, tais como:
     -> SQLInjection
     -> Hash & Salt das passwords dos utilizadores
+    -> Envio de informação encriptada
 */
 public class ServerController extends Controller {
     //JDBC driver name and database URL
@@ -63,9 +65,11 @@ public class ServerController extends Controller {
                 case "Login": {
                     Login(ref, jsonContent.getString("username"), jsonContent.getString("password"));
                 } break;
+                case "Register": {
+                    Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
+                } break;
                 case "AddMusic": {/*TODO*/} break;
                 case "AddPlaylist": {/*TODO*/} break;
-                case "AddUser": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
                 case "RemovePlaylist": {/*TODO*/} break;
                 case "GetMusics": {/*TODO*/} break;
@@ -102,7 +106,29 @@ public class ServerController extends Controller {
 
     @Override
     public synchronized void Register(Object ref, String username, String password, String passwordConf) {
-
+        System.out.println("GOT REGISTER REQUEST:\nUsername: " + username + "\nPassword: " + password + "\nPassword Confirmation: " + passwordConf);
+        if(password.equals(passwordConf)){
+            String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
+            try {
+                stmt = conn.createStatement();
+                int rowCount = stmt.executeUpdate(query);
+                if(rowCount == 1)
+                    Notify(ref, NotificationType.registerSuccess);
+                else
+                    Notify(ref, NotificationType.registerError);
+            } catch (SQLException e ) {
+                Notify(ref, NotificationType.registerError);
+            } finally {
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else
+            Notify(ref, NotificationType.registerError);
     }
 
     @Override
