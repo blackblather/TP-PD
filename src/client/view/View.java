@@ -29,6 +29,10 @@ public abstract class View implements IObserver {
             window.show();
     }
 
+    public void Close(){
+        window.close();
+    }
+
     private void SetScene(Scene scene){
         window.setScene(scene);
     }
