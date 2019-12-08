@@ -87,28 +87,23 @@ public class Register extends View {
     @Override
     public void OnRegisterSuccess(Object ref) {
         Platform.runLater(
-                () -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("YE BOYEEEEEEEEEEEEEEEEEE");
-                    alert.setHeaderText("Look, an Information Dialog");
-                    alert.setContentText("REGISTER FUCKING SUCCESSFUL!");
-
-                    alert.showAndWait();
-                }
+            () -> {
+                Close();
+            }
         );
     }
 
     @Override
     public void OnRegisterError(Object ref) {
         Platform.runLater(
-                () -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("An error occurred");
-                    alert.setHeaderText("Invalid credentials.");
-                    alert.setContentText("An error occurred while trying to register your account");
+            () -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("An error occurred");
+                alert.setHeaderText("Invalid credentials.");
+                alert.setContentText("An error occurred while trying to register your account");
 
-                    alert.showAndWait();
-                }
+                alert.showAndWait();
+            }
         );
     }
 }

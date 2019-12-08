@@ -85,12 +85,17 @@ public class Login extends View{
     public void OnSuccessfulLogin(Object ref) {
         Platform.runLater(
             () -> {
+                Close();
+
+                Lobby lobby = new Lobby(controller, new Stage());
+                lobby.Show();
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("YE BOYEEEEEEEEEEEEEEEEEE");
                 alert.setHeaderText("Look, an Information Dialog");
                 alert.setContentText("LOGIN FUCKING SUCCESSFUL!");
 
-                alert.showAndWait();
+                alert.show();
             }
         );
     }
@@ -105,6 +110,17 @@ public class Login extends View{
                 alert.setContentText("Username and/or password are invalid");
 
                 alert.showAndWait();
+            }
+        );
+    }
+
+    @Override
+    public void OnRegisterSuccess(Object ref) {
+        Platform.runLater(
+            () -> {
+                Close();
+                Lobby lobby = new Lobby(controller, new Stage());
+                lobby.Show();
             }
         );
     }
