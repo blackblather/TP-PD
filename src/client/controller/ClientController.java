@@ -26,16 +26,21 @@ public class ClientController extends Controller {
         JSONObject jsonObject = new JSONObject(jsonStr);
         if (IsValidJSONResponse(jsonObject)) {
             switch (jsonObject.getString("Type")) {
-                case "ServerStatus": { /*TODO*/ } break;
+                case "ServerStatus": {/*TODO*/} break;
                 case "Login": {
                     if(jsonObject.getBoolean("Success"))
                         Notify(NotificationType.successfulLogin);
                     else
                         Notify(NotificationType.invalidCredentials);
                 } break;
-                case "AddMusic": { /*TDO*/ } break;
+                case "Register": {
+                    if(jsonObject.getBoolean("Success"))
+                        Notify(NotificationType.registerSuccess);
+                    else
+                        Notify(NotificationType.registerError);
+                } break;
+                case "AddMusic": {/*TODO*/} break;
                 case "AddPlaylist": {/*TODO*/} break;
-                case "AddUser": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
                 case "RemovePlaylist": {/*TODO*/} break;
                 case "GetMusics": {/*TODO*/} break;
@@ -62,7 +67,16 @@ public class ClientController extends Controller {
 
     @Override
     public synchronized void Register(Object ref, String username, String password, String passwordConf) {
-
+        //Convert to JSONObject
+        String jsonStr = "{\"Type\":\"Register\",\"Content\":{\"username\":\""+username+"\",\"password\":\""+password+"\", \"passwordConf\":\""+passwordConf+"\"}}";
+        try{
+            tcpService = new TCPService(new Socket("localhost", 6002), this);
+            tcpService.SendMsg(jsonStr);
+            ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
+            readResponseThread.start();
+        } catch (IOException | IllegalArgumentException e) {
+            Notify(NotificationType.invalidCredentials);
+        }
     }
 
     @Override
