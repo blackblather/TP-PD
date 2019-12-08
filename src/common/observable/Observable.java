@@ -8,7 +8,9 @@ import java.util.List;
 public abstract class Observable {
     public enum NotificationType{
         successfulLogin,
-        invalidCredentials
+        invalidCredentials,
+        registerSuccess,
+        registerError
     }
 
     private List<IObserver> observers = new ArrayList<>();
@@ -35,6 +37,8 @@ public abstract class Observable {
             switch (type){
                 case successfulLogin: obs.OnSuccessfulLogin(ref); break;
                 case invalidCredentials: obs.OnInvalidCredentials(ref); break;
+                case registerSuccess: obs.OnRegisterSuccess(ref); break;
+                case registerError: obs.OnRegisterError(ref); break;
             }
         }
     }
