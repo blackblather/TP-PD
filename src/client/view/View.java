@@ -55,10 +55,10 @@ public abstract class View implements IObserver {
     public void Update(Object o) { }
 
     @Override
-    public void OnSuccessfulLogin(Object ref) { }
+    public void OnLoginSuccess(Object ref) { }
 
     @Override
-    public void OnInvalidCredentials(Object ref) { }
+    public void OnLoginError(Object ref) { }
 
     @Override
     public void OnRegisterSuccess(Object ref) { }

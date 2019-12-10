@@ -82,7 +82,7 @@ public class Login extends View{
     }
 
     @Override
-    public void OnSuccessfulLogin(Object ref) {
+    public void OnLoginSuccess(Object ref) {
         Platform.runLater(
             () -> {
                 Close();
@@ -93,7 +93,7 @@ public class Login extends View{
     }
 
     @Override
-    public void OnInvalidCredentials(Object ref) {
+    public void OnLoginError(Object ref) {
         Platform.runLater(
             () -> DisplayAlert(Alert.AlertType.ERROR,"An error occurred", "Invalid credentials.", "Username and/or password are invalid")
         );
