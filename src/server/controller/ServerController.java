@@ -1,16 +1,16 @@
 package server.controller;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import common.controller.Controller;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.*;
 
-/*NOTA: A implementação desta classe ServerController não tem em consideração questões de segurança, tais como:
+/*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
     -> SQLInjection
     -> Hash & Salt das passwords dos utilizadores
     -> Envio de informação encriptada
+    -> Caracteres especiais obrigatórios e número mínimo de caracteres na password
 */
 public class ServerController extends Controller {
     //JDBC driver name and database URL

@@ -9,6 +9,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.Socket;
 
+/*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
+    -> SQLInjection
+    -> Hash & Salt das passwords dos utilizadores
+    -> Envio de informação encriptada
+    -> Caracteres especiais obrigatórios e número mínimo de caracteres na password
+*/
 public class ClientController extends Controller {
     private TCPService tcpService;
 
