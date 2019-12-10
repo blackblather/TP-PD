@@ -32,23 +32,23 @@ public class Lobby extends View {
         //Creates our main menu to hold our Sub-Menus.
         MenuBar mainMenu = new MenuBar();
         mainMenu.setPrefWidth(scene.getWidth());
-        //Create and add the "File" sub-menu options.
-        Menu file = new Menu("File");
-        MenuItem openFile = new MenuItem("Open File");
-        MenuItem exitApp = new MenuItem("Exit");
-        file.getItems().addAll(openFile,exitApp);
+        //Create and add the "Account" sub-menu options.
+        Menu menuAccount = new Menu("Account");
+        MenuItem menuItemLogout = new MenuItem("Logout");
+        MenuItem menuItemExit = new MenuItem("Exit");
+        menuAccount.getItems().addAll(menuItemLogout,menuItemExit);
 
-        //Create and add the "Edit" sub-menu options.
-        Menu edit = new Menu("Edit");
-        MenuItem properties = new MenuItem("Properties");
-        edit.getItems().add(properties);
+        //Create and add the "Music" sub-menu options.
+        Menu menuMusic = new Menu("Music");
+        MenuItem menuItemUploadSong = new MenuItem("Upload music");
+        menuMusic.getItems().add(menuItemUploadSong);
 
-        //Create and add the "Help" sub-menu options.
-        Menu help = new Menu("Help");
-        MenuItem visitWebsite = new MenuItem("Visit Website");
-        help.getItems().add(visitWebsite);
+        //Create and add the "Playlists" sub-menu options.
+        Menu menuPlaylists = new Menu("Playlists");
+        MenuItem menuItemCreatePlaylist = new MenuItem("Create playlist");
+        menuPlaylists.getItems().add(menuItemCreatePlaylist);
 
-        mainMenu.getMenus().addAll(file, edit, help);
+        mainMenu.getMenus().addAll(menuAccount, menuMusic, menuPlaylists);
 
         //Create root elements
         VBox vBox = new VBox(10);
