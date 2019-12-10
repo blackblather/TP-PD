@@ -10,7 +10,8 @@ public abstract class Observable {
         successfulLogin,
         invalidCredentials,
         registerSuccess,
-        registerError
+        registerError,
+        exception
     }
 
     private List<IObserver> observers = new ArrayList<>();
@@ -43,7 +44,24 @@ public abstract class Observable {
         }
     }
 
+    protected void Notify(Object ref, NotificationType type, Object... param){
+        for (IObserver obs : observers){
+            switch (type){
+                case exception:{
+                    //param[0] (Integer) -> Error code
+                    //param[1] (String)-> Message
+                    if(param.length == 2 && param[0] instanceof Integer && param[1] instanceof String)
+                        obs.OnExceptionOccurred(ref, (Integer) param[0], (String) param[1]);
+                } break;
+            }
+        }
+    }
+
     protected void Notify(NotificationType type){
         Notify(null, type);
+    }
+
+    protected void Notify(NotificationType type, Object... param){
+        Notify(null, type, param);
     }
 }

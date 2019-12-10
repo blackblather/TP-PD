@@ -23,6 +23,7 @@ public class ClientController extends Controller {
     }
 
     private boolean IsValidJSONResponse(JSONObject jsonObject){
+        //TODO
         return true;
     }
 
@@ -32,6 +33,9 @@ public class ClientController extends Controller {
         JSONObject jsonObject = new JSONObject(jsonStr);
         if (IsValidJSONResponse(jsonObject)) {
             switch (jsonObject.getString("Type")) {
+                case "Exception": {
+                    Notify(NotificationType.exception, jsonObject.getInt("ErrorCode"), jsonObject.getString("Message"));
+                } break;
                 case "ServerStatus": {/*TODO*/} break;
                 case "Login": {
                     if(jsonObject.getBoolean("Success"))

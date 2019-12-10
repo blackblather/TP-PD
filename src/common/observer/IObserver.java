@@ -6,4 +6,5 @@ public interface IObserver {
     void OnInvalidCredentials(Object ref);
     void OnRegisterSuccess(Object ref);
     void OnRegisterError(Object ref);
+    void OnExceptionOccurred(Object ref, Integer errorCode, String message);
 }

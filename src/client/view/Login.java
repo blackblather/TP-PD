@@ -95,23 +95,21 @@ public class Login extends View{
     @Override
     public void OnInvalidCredentials(Object ref) {
         Platform.runLater(
-            () -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("An error occurred");
-                alert.setHeaderText("Invalid credentials.");
-                alert.setContentText("Username and/or password are invalid");
-
-                alert.showAndWait();
-            }
+            () -> DisplayAlert(Alert.AlertType.ERROR,"An error occurred", "Invalid credentials.", "Username and/or password are invalid")
         );
     }
 
     @Override
     public void OnRegisterSuccess(Object ref) {
         Platform.runLater(
-            () -> {
-                Close();
-            }
+            this::Close
+        );
+    }
+
+    @Override
+    public void OnExceptionOccurred(Object ref, Integer errorCode, String message) {
+        Platform.runLater(
+            () -> DisplayAlert(Alert.AlertType.ERROR,"An exception occurred", "Error code: " + errorCode, "Message: " + message)
         );
     }
 }

@@ -92,13 +92,13 @@ public class ServerController extends Controller {
             else
                 Notify(ref, NotificationType.invalidCredentials);
         } catch (SQLException e ) {
-            e.printStackTrace();
+            Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
                 }
             }
         }
@@ -117,13 +117,13 @@ public class ServerController extends Controller {
                 else
                     Notify(ref, NotificationType.registerError);
             } catch (SQLException e ) {
-                Notify(ref, NotificationType.registerError);
+                Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
                     }
                 }
             }
