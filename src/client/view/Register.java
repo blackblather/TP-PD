@@ -89,6 +89,8 @@ public class Register extends View {
         Platform.runLater(
             () -> {
                 Close();
+                Lobby lobby = new Lobby(controller, new Stage());
+                lobby.Show();
             }
         );
     }
