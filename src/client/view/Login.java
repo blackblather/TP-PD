@@ -107,9 +107,9 @@ public class Login extends View{
     }
 
     @Override
-    public void OnExceptionOccurred(Object ref, Integer errorCode, String message) {
+    public void OnExceptionOccurred(Object ref) {
         Platform.runLater(
-            () -> DisplayErrorAlert("Error code: " + errorCode, "Message: " + message)
+            () -> DisplayErrorAlert("Unknown exception","The server is experiencing some problems at the moment.\nPlease try again later")
         );
     }
 }

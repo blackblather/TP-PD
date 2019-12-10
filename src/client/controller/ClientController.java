@@ -34,7 +34,7 @@ public class ClientController extends Controller {
         if (IsValidJSONResponse(jsonObject)) {
             switch (jsonObject.getString("Type")) {
                 case "Exception": {
-                    Notify(NotificationType.exception, jsonObject.getInt("ErrorCode"), jsonObject.getString("Message"));
+                    Notify(NotificationType.exception);
                 } break;
                 case "ServerStatus": {/*TODO*/} break;
                 case "Login": {

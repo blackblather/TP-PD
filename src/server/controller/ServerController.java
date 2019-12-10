@@ -89,17 +89,18 @@ public class ServerController extends Controller {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(rs.next() && rs.getInt("total") == 1)
-                Notify(ref, NotificationType.loginSuccess);
+                Notify(ref, NotificationType.exception);
+                //Notify(ref, NotificationType.loginSuccess);
             else
                 Notify(ref, NotificationType.loginInvalidCredentials);
         } catch (SQLException e ) {
-            Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
+            Notify(ref, NotificationType.exception);
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
-                    Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
+                    Notify(ref, NotificationType.exception);
                 }
             }
         }
@@ -117,13 +118,13 @@ public class ServerController extends Controller {
             } catch (MySQLIntegrityConstraintViolationException e){
                 Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (SQLException e) {
-                Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
+                Notify(ref, NotificationType.exception);
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
                     } catch (SQLException e) {
-                        Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
+                        Notify(ref, NotificationType.exception);
                     }
                 }
             }

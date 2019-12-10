@@ -42,28 +42,12 @@ public abstract class Observable {
                 case registerSuccess: obs.OnRegisterSuccess(ref); break;
                 case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
                 case registerUsernameNotUnique: obs.OnUsernameNotUnique(ref); break;
-            }
-        }
-    }
-
-    protected void Notify(Object ref, NotificationType type, Object... param){
-        for (IObserver obs : observers){
-            switch (type){
-                case exception:{
-                    //param[0] (Integer) -> Error code
-                    //param[1] (String)-> Message
-                    if(param.length == 2 && param[0] instanceof Integer && param[1] instanceof String)
-                        obs.OnExceptionOccurred(ref, (Integer) param[0], (String) param[1]);
-                } break;
+                case exception: obs.OnExceptionOccurred(ref); break;
             }
         }
     }
 
     protected void Notify(NotificationType type){
         Notify(null, type);
-    }
-
-    protected void Notify(NotificationType type, Object... param){
-        Notify(null, type, param);
     }
 }

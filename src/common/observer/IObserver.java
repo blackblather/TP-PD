@@ -7,5 +7,5 @@ public interface IObserver {
     void OnRegisterSuccess(Object ref);
     void OnPasswordsNotMatching(Object ref);
     void OnUsernameNotUnique(Object ref);
-    void OnExceptionOccurred(Object ref, Integer errorCode, String message);
+    void OnExceptionOccurred(Object ref);
 }

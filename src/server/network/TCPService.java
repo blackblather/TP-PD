@@ -79,10 +79,10 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnExceptionOccurred(Object ref, Integer errorCode, String message) {
+    public void OnExceptionOccurred(Object ref) {
         if (ref == this) {
             try {
-                SendMsg("{\"Type\":\"Exception\", \"ErrorCode\":" + errorCode + ", \"Message\":\"" + message + "\"}");
+                SendMsg("{\"Type\":\"Exception\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }

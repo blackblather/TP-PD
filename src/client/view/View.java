@@ -70,5 +70,5 @@ public abstract class View implements IObserver {
     public void OnUsernameNotUnique(Object ref) { }
 
     @Override
-    public void OnExceptionOccurred(Object ref, Integer errorCode, String message) { }
+    public void OnExceptionOccurred(Object ref) { }
 }
