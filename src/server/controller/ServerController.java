@@ -89,8 +89,7 @@ public class ServerController extends Controller {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(rs.next() && rs.getInt("total") == 1)
-                Notify(ref, NotificationType.exception);
-                //Notify(ref, NotificationType.loginSuccess);
+                Notify(ref, NotificationType.loginSuccess);
             else
                 Notify(ref, NotificationType.loginInvalidCredentials);
         } catch (SQLException e ) {
