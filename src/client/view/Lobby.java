@@ -37,17 +37,15 @@ public class Lobby extends View {
         MenuItem menuItemLogout = new MenuItem("Logout");
         MenuItem menuItemExit = new MenuItem("Exit");
         menuAccount.getItems().addAll(menuItemLogout,menuItemExit);
-
         //Create and add the "Music" sub-menu options.
         Menu menuMusic = new Menu("Music");
         MenuItem menuItemUploadSong = new MenuItem("Upload music");
         menuMusic.getItems().add(menuItemUploadSong);
-
         //Create and add the "Playlists" sub-menu options.
         Menu menuPlaylists = new Menu("Playlists");
         MenuItem menuItemCreatePlaylist = new MenuItem("Create playlist");
         menuPlaylists.getItems().add(menuItemCreatePlaylist);
-
+        //Add menus to mainMenu
         mainMenu.getMenus().addAll(menuAccount, menuMusic, menuPlaylists);
 
         //Create root elements
