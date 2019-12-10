@@ -1,5 +1,6 @@
 package server.controller;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import common.controller.Controller;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,12 +112,11 @@ public class ServerController extends Controller {
             String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
             try {
                 stmt = conn.createStatement();
-                int rowCount = stmt.executeUpdate(query);
-                if(rowCount == 1)
-                    Notify(ref, NotificationType.registerSuccess);
-                else
-                    Notify(ref, NotificationType.registerUsernameNotUnique);
-            } catch (SQLException e ) {
+                stmt.executeUpdate(query);
+                Notify(ref, NotificationType.registerSuccess);
+            } catch (MySQLIntegrityConstraintViolationException e){
+                Notify(ref, NotificationType.registerUsernameNotUnique);
+            } catch (SQLException e) {
                 Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
             } finally {
                 if (stmt != null) {

@@ -47,7 +47,11 @@ public class ClientController extends Controller {
                     if(jsonObject.getBoolean("Success"))
                         Notify(NotificationType.registerSuccess);
                     else
-                        Notify(NotificationType.registerPasswordsNotMatching);
+                        switch (jsonObject.getString("ErrorType")){
+                            case "PasswordsNotMatching": Notify(NotificationType.registerPasswordsNotMatching); break;
+                            case "UsernameNotUnique": Notify(NotificationType.registerUsernameNotUnique); break;
+                        }
+
                 } break;
                 case "AddMusic": {/*TODO*/} break;
                 case "AddPlaylist": {/*TODO*/} break;

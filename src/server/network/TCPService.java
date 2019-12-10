@@ -58,7 +58,19 @@ public class TCPService extends common.network.TCPService implements IObserver {
     public void OnPasswordsNotMatching(Object ref) {
         if (ref == this) {
             try {
-                SendMsg("{\"Type\":\"Register\", \"Success\":false}");
+                SendMsg("{\"Type\":\"Register\", \"Success\":false, \"ErrorType\":\"PasswordsNotMatching\"}");
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void OnUsernameNotUnique(Object ref) {
+        if (ref == this) {
+            try {
+                SendMsg("{\"Type\":\"Register\", \"Success\":false, \"ErrorType\":\"UsernameNotUnique\"}");
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
