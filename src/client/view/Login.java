@@ -17,6 +17,7 @@ public class Login extends View{
     public Login(Controller controller, Stage window) {
         super(controller, window);
         SetTitle("Login");
+        window.setResizable(false);
     }
 
     @Override

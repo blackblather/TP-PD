@@ -20,6 +20,7 @@ public class Register extends View {
         super(controller, window);
         window.initModality(Modality.APPLICATION_MODAL);
         SetTitle("Register");
+        window.setResizable(false);
     }
 
     @Override

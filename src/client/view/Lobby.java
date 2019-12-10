@@ -5,10 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,6 +17,7 @@ public class Lobby extends View {
     Lobby(Controller controller, Stage window) {
         super(controller, window);
         SetTitle("Lobby");
+        window.setResizable(false);
     }
 
     @Override
@@ -30,6 +28,27 @@ public class Lobby extends View {
         //Create scene
         Scene scene = new Scene(root, 720, 500);
         scene.setFill(Color.AZURE);
+
+        //Creates our main menu to hold our Sub-Menus.
+        MenuBar mainMenu = new MenuBar();
+        mainMenu.setPrefWidth(scene.getWidth());
+        //Create and add the "File" sub-menu options.
+        Menu file = new Menu("File");
+        MenuItem openFile = new MenuItem("Open File");
+        MenuItem exitApp = new MenuItem("Exit");
+        file.getItems().addAll(openFile,exitApp);
+
+        //Create and add the "Edit" sub-menu options.
+        Menu edit = new Menu("Edit");
+        MenuItem properties = new MenuItem("Properties");
+        edit.getItems().add(properties);
+
+        //Create and add the "Help" sub-menu options.
+        Menu help = new Menu("Help");
+        MenuItem visitWebsite = new MenuItem("Visit Website");
+        help.getItems().add(visitWebsite);
+
+        mainMenu.getMenus().addAll(file, edit, help);
 
         //Create root elements
         VBox vBox = new VBox(10);
@@ -52,7 +71,7 @@ public class Lobby extends View {
         //Add children to vBox
         vBox.getChildren().addAll(hBox);
 
-        root.getChildren().add(vBox);
+        root.getChildren().addAll(mainMenu,vBox);
 
         return scene;
     }
