@@ -32,7 +32,7 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnLoginError(Object ref) {
+    public void OnInvalidCredentials(Object ref) {
         if (ref == this) {
             try {
                 SendMsg("{\"Type\":\"Login\", \"Success\":false}");
@@ -55,7 +55,7 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnRegisterError(Object ref) {
+    public void OnPasswordsNotMatching(Object ref) {
         if (ref == this) {
             try {
                 SendMsg("{\"Type\":\"Register\", \"Success\":false}");

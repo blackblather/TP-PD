@@ -90,7 +90,7 @@ public class ServerController extends Controller {
             if(rs.next() && rs.getInt("total") == 1)
                 Notify(ref, NotificationType.loginSuccess);
             else
-                Notify(ref, NotificationType.loginError);
+                Notify(ref, NotificationType.loginInvalidCredentials);
         } catch (SQLException e ) {
             Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
         } finally {
@@ -115,7 +115,7 @@ public class ServerController extends Controller {
                 if(rowCount == 1)
                     Notify(ref, NotificationType.registerSuccess);
                 else
-                    Notify(ref, NotificationType.registerError);
+                    Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (SQLException e ) {
                 Notify(ref, NotificationType.exception, e.getErrorCode(), e.getMessage());
             } finally {
@@ -128,7 +128,7 @@ public class ServerController extends Controller {
                 }
             }
         } else
-            Notify(ref, NotificationType.registerError);
+            Notify(ref, NotificationType.registerPasswordsNotMatching);
     }
 
     @Override

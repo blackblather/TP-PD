@@ -96,16 +96,16 @@ public class Register extends View {
     }
 
     @Override
-    public void OnRegisterError(Object ref) {
+    public void OnPasswordsNotMatching(Object ref) {
         Platform.runLater(
-            () -> {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("An error occurred");
-                alert.setHeaderText("Invalid credentials.");
-                alert.setContentText("An error occurred while trying to register your account");
+            () -> DisplayErrorAlert("Passwords do not match", "The password and password confirmation fields do not match")
+        );
+    }
 
-                alert.showAndWait();
-            }
+    @Override
+    public void OnUsernameNotUnique(Object ref) {
+        Platform.runLater(
+            () -> DisplayErrorAlert("Username not unique", "The chosen username is already registered")
         );
     }
 }

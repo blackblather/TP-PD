@@ -93,9 +93,9 @@ public class Login extends View{
     }
 
     @Override
-    public void OnLoginError(Object ref) {
+    public void OnInvalidCredentials(Object ref) {
         Platform.runLater(
-            () -> DisplayAlert(Alert.AlertType.ERROR,"An error occurred", "Invalid credentials.", "Username and/or password are invalid")
+            () -> DisplayErrorAlert("Invalid credentials", "Username and/or password are invalid")
         );
     }
 
@@ -109,7 +109,7 @@ public class Login extends View{
     @Override
     public void OnExceptionOccurred(Object ref, Integer errorCode, String message) {
         Platform.runLater(
-            () -> DisplayAlert(Alert.AlertType.ERROR,"An exception occurred", "Error code: " + errorCode, "Message: " + message)
+            () -> DisplayErrorAlert("Error code: " + errorCode, "Message: " + message)
         );
     }
 }

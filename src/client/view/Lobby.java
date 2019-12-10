@@ -28,7 +28,7 @@ public class Lobby extends View {
         FlowPane root = new FlowPane(Orientation.VERTICAL);
 
         //Create scene
-        Scene scene = new Scene(root, 250, 170);
+        Scene scene = new Scene(root, 720, 500);
         scene.setFill(Color.AZURE);
 
         //Create root elements
@@ -43,16 +43,14 @@ public class Lobby extends View {
         //Align hBox's content
         hBox.setAlignment(Pos.CENTER_RIGHT);
 
-        //Label - Username
-        Label lblUsername = new Label("Username:");
+        //Button - Add Song
+        Button btnAddSong = new Button("Add Song");
 
-        //Textbox - Username
-        TextField txtUsername = new TextField();
+        //Add btnAddSong to hBox
+        hBox.getChildren().add(btnAddSong);
 
         //Add children to vBox
-        vBox.getChildren().addAll(lblUsername,
-                txtUsername,
-                hBox);
+        vBox.getChildren().addAll(hBox);
 
         root.getChildren().add(vBox);
 

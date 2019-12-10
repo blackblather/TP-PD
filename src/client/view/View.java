@@ -30,9 +30,9 @@ public abstract class View implements IObserver {
             window.show();
     }
 
-    void DisplayAlert(Alert.AlertType type, String title, String text, String contentText){
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
+    void DisplayErrorAlert(String text, String contentText){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("An error occurred");
         alert.setHeaderText(text);
         alert.setContentText(contentText);
 
@@ -58,13 +58,16 @@ public abstract class View implements IObserver {
     public void OnLoginSuccess(Object ref) { }
 
     @Override
-    public void OnLoginError(Object ref) { }
+    public void OnInvalidCredentials(Object ref) { }
 
     @Override
     public void OnRegisterSuccess(Object ref) { }
 
     @Override
-    public void OnRegisterError(Object ref) { }
+    public void OnPasswordsNotMatching(Object ref) { }
+
+    @Override
+    public void OnUsernameNotUnique(Object ref) { }
 
     @Override
     public void OnExceptionOccurred(Object ref, Integer errorCode, String message) { }

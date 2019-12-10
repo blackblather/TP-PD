@@ -41,13 +41,13 @@ public class ClientController extends Controller {
                     if(jsonObject.getBoolean("Success"))
                         Notify(NotificationType.loginSuccess);
                     else
-                        Notify(NotificationType.loginError);
+                        Notify(NotificationType.loginInvalidCredentials);
                 } break;
                 case "Register": {
                     if(jsonObject.getBoolean("Success"))
                         Notify(NotificationType.registerSuccess);
                     else
-                        Notify(NotificationType.registerError);
+                        Notify(NotificationType.registerPasswordsNotMatching);
                 } break;
                 case "AddMusic": {/*TODO*/} break;
                 case "AddPlaylist": {/*TODO*/} break;
@@ -71,7 +71,7 @@ public class ClientController extends Controller {
             ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
             readResponseThread.start();
         } catch (IOException | IllegalArgumentException e) {
-            Notify(NotificationType.loginError);
+            Notify(NotificationType.loginInvalidCredentials);
         }
     }
 
@@ -85,7 +85,7 @@ public class ClientController extends Controller {
             ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
             readResponseThread.start();
         } catch (IOException | IllegalArgumentException e) {
-            Notify(NotificationType.loginError);
+            Notify(NotificationType.loginInvalidCredentials);
         }
     }
 

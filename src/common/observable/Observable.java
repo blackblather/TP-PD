@@ -8,9 +8,10 @@ import java.util.List;
 public abstract class Observable {
     public enum NotificationType{
         loginSuccess,
-        loginError,
+        loginInvalidCredentials,
         registerSuccess,
-        registerError,
+        registerPasswordsNotMatching,
+        registerUsernameNotUnique,
         exception
     }
 
@@ -37,9 +38,10 @@ public abstract class Observable {
         for (IObserver obs : observers){
             switch (type){
                 case loginSuccess: obs.OnLoginSuccess(ref); break;
-                case loginError: obs.OnLoginError(ref); break;
+                case loginInvalidCredentials: obs.OnInvalidCredentials(ref); break;
                 case registerSuccess: obs.OnRegisterSuccess(ref); break;
-                case registerError: obs.OnRegisterError(ref); break;
+                case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
+                case registerUsernameNotUnique: obs.OnUsernameNotUnique(ref); break;
             }
         }
     }
