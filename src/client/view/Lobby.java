@@ -105,24 +105,26 @@ public class Lobby extends View {
         hBox.setAlignment(Pos.CENTER_RIGHT);
 
         //Button - Add Song
-        Button btnRefresh = new Button("Add Song");
+        Button btnRefresh = new Button("Refresh");
 
         /*TODO*//*TODO*//*TODO*/
         btnRefresh.setOnAction(actionEvent -> {
-            observableMusicList.add(new Music("YEEE","CYKA",2020));
+//            observableMusicList.add(new Music("YEEE","CYKA",2020));
         });
 
         //Button - Add Song
-        Button btnUploadMusic = new Button("Remove Music");
+        Button btnAddSong = new Button("Add Song");
 
-        /*TODO*//*TODO*//*TODO*/
-        btnUploadMusic.setOnAction(actionEvent -> {
-            if(observableMusicList.size() > 0)
-                observableMusicList.remove(observableMusicList.size()-1);
+        btnAddSong.setOnAction(actionEvent -> {
+            AddSong addSong = new AddSong(controller, new Stage());
+            addSong.SetOwner(window);
+            addSong.Show();
+//            if(observableMusicList.size() > 0)
+//                observableMusicList.remove(observableMusicList.size()-1);
         });
 
         //Add btnAddSong to hBox
-        hBox.getChildren().addAll(btnRefresh, btnUploadMusic);
+        hBox.getChildren().addAll(btnRefresh, btnAddSong);
 
         //Create Table View
         TableView<Music> table = CreateTableView();
