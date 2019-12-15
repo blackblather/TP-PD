@@ -65,32 +65,29 @@ public class ClientController extends Controller {
         }
     }
 
-    @Override
-    public void Login(Object ref, String username, String password) {
-        //Convert to JSONObject
-        String jsonStr = "{\"Type\":\"Login\",\"Content\":{\"username\":\""+username+"\",\"password\":\""+password+"\"}}";
+    private void TryConnectingToServer(String jsonStr){
         try{
             tcpService = new TCPService(new Socket("localhost", 6002), this);
             tcpService.SendMsg(jsonStr);
             ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
             readResponseThread.start();
         } catch (IOException | IllegalArgumentException e) {
-            Notify(NotificationType.loginInvalidCredentials);
+            Notify(NotificationType.exception);
         }
+    }
+
+    @Override
+    public void Login(Object ref, String username, String password) {
+        //Convert to JSONObject
+        String jsonStr = "{\"Type\":\"Login\",\"Content\":{\"username\":\""+username+"\",\"password\":\""+password+"\"}}";
+        TryConnectingToServer(jsonStr);
     }
 
     @Override
     public synchronized void Register(Object ref, String username, String password, String passwordConf) {
         //Convert to JSONObject
         String jsonStr = "{\"Type\":\"Register\",\"Content\":{\"username\":\""+username+"\",\"password\":\""+password+"\", \"passwordConf\":\""+passwordConf+"\"}}";
-        try{
-            tcpService = new TCPService(new Socket("localhost", 6002), this);
-            tcpService.SendMsg(jsonStr);
-            ReadResponseThread readResponseThread = new ReadResponseThread(tcpService);
-            readResponseThread.start();
-        } catch (IOException | IllegalArgumentException e) {
-            Notify(NotificationType.loginInvalidCredentials);
-        }
+        TryConnectingToServer(jsonStr);
     }
 
     @Override
