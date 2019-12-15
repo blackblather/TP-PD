@@ -2,6 +2,7 @@ package client.view.modal;
 
 import client.view.View;
 import common.controller.Controller;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,10 +29,17 @@ public class UploadSong extends View {
         window.setResizable(false);
     }
 
+    private void ModifyBtnVisibility(Button btnAddSong, TextField txtSongName, TextField txtFilePath){
+        if(txtSongName.getText().length() > 0 & txtFilePath.getText().length() > 0)
+            btnAddSong.setDisable(false);
+        else
+            btnAddSong.setDisable(true);
+    }
+
     @Override
     public Scene GetScene() {
         //Create root
-        FlowPane root = new FlowPane(Orientation.VERTICAL);
+        FlowPane root = new FlowPane();
 
         //Create scene
         Scene scene = new Scene(root, 270, 170);
@@ -57,39 +66,52 @@ public class UploadSong extends View {
         //Label - File Path
         Label lblFilePath = new Label("File path:");
 
+        //Create HBox to host txtFilePath and btnFindFile side-by-side
+        HBox hBoxTxtBtn = new HBox(10);
+        hBoxTxtBtn.setPrefWidth(scene.getWidth());
+
         //Textbox - File Path
         TextField txtFilePath = new TextField();
 
         //Button - Find File
-        Button btnFindFile = new Button("Open File");
-        btnFindFile.setOnAction(event -> {
+        Button btnFindFile = new Button("Open");
+        btnFindFile.setPrefWidth(75);
 
+        btnFindFile.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                    new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*"));
+            fileChooser.setTitle("Select file to open");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+                    new FileChooser.ExtensionFilter("All files", "*.*"));
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null)
                 txtFilePath.setText(selectedFile.getAbsolutePath());
         });
 
+        //Stylizes txtFilePath
+        txtFilePath.setPrefWidth(hBoxTxtBtn.getPrefWidth()-btnFindFile.getPrefWidth());
+
+        //Add children to hBoxTxtBtn
+        hBoxTxtBtn.getChildren().addAll(txtFilePath, btnFindFile);
+
         //Button - Add Song
         Button btnAddSong = new Button("Add Song");
+        btnAddSong.setDisable(true);
         btnAddSong.setOnAction(event -> {
 
         });
 
+        //Textbox listeners
+        txtSongName.setOnKeyTyped(keyEvent -> ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath));
+        txtFilePath.setOnKeyTyped(keyEvent -> ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath));
+
         //Add children to hBox
-        hBox.getChildren().addAll(btnFindFile, btnAddSong);
+        hBox.getChildren().addAll(btnAddSong);
 
         //Add children to vBox
         vBox.getChildren().addAll(lblSongName,
                 txtSongName,
                 lblFilePath,
-                txtFilePath,
+                hBoxTxtBtn,
                 hBox);
 
         root.getChildren().add(vBox);
