@@ -1,5 +1,6 @@
 package client.view;
 
+import client.view.modal.Register;
 import common.controller.Controller;
 import javafx.application.Platform;
 import javafx.geometry.Insets;

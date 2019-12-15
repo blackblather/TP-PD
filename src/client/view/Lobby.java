@@ -1,5 +1,6 @@
 package client.view;
 
+import client.view.modal.UploadSong;
 import common.controller.Controller;
 import common.model.Music;
 import javafx.collections.FXCollections;
@@ -23,7 +24,7 @@ public class Lobby extends View {
 
     private ObservableList<Music> observableMusicList = FXCollections.observableArrayList(musicList);
 
-    Lobby(Controller controller, Stage window) {
+    public Lobby(Controller controller, Stage window) {
         super(controller, window);
         SetTitle("Lobby");
         window.setResizable(false);
@@ -116,9 +117,9 @@ public class Lobby extends View {
         Button btnAddSong = new Button("Add Song");
 
         btnAddSong.setOnAction(actionEvent -> {
-            AddSong addSong = new AddSong(controller, new Stage());
-            addSong.SetOwner(window);
-            addSong.Show();
+            UploadSong uploadSong = new UploadSong(controller, new Stage());
+            uploadSong.SetOwner(window);
+            uploadSong.Show();
 //            if(observableMusicList.size() > 0)
 //                observableMusicList.remove(observableMusicList.size()-1);
         });

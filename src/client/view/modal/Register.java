@@ -1,5 +1,7 @@
-package client.view;
+package client.view.modal;
 
+import client.view.Lobby;
+import client.view.View;
 import common.controller.Controller;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -16,7 +18,7 @@ import javafx.stage.Stage;
 
 public class Register extends View {
 
-    Register(Controller controller, Stage window) {
+    public Register(Controller controller, Stage window) {
         super(controller, window);
         window.initModality(Modality.APPLICATION_MODAL);
         SetTitle("Register");

@@ -10,10 +10,10 @@ import javafx.stage.Window;
 
 public abstract class View implements IObserver {
 
-    Controller controller;
-    Stage window;
+    protected Controller controller;
+    protected Stage window;
 
-    View(Controller controller, Stage window){
+    public View(Controller controller, Stage window){
         this.controller = controller;
         this.window = window;
         this.window.getIcons().add(new Image("client/res/icon.png"));
@@ -25,7 +25,7 @@ public abstract class View implements IObserver {
 
     public abstract Scene GetScene();
 
-    void SetOwner(Window owner){
+    protected void SetOwner(Window owner){
         window.initOwner(owner);
     }
 
@@ -35,7 +35,7 @@ public abstract class View implements IObserver {
             window.show();
     }
 
-    void DisplayErrorAlert(String text, String contentText){
+    protected void DisplayErrorAlert(String text, String contentText){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("An error occurred");
         alert.setHeaderText(text);
@@ -44,7 +44,7 @@ public abstract class View implements IObserver {
         alert.showAndWait();
     }
 
-    void Close(){
+    protected void Close(){
         window.close();
     }
 
@@ -52,7 +52,7 @@ public abstract class View implements IObserver {
         window.setScene(scene);
     }
 
-    void SetTitle(String title){
+    protected void SetTitle(String title){
         window.setTitle("Musify - " + title);
     }
 

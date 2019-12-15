@@ -1,5 +1,6 @@
-package client.view;
+package client.view.modal;
 
+import client.view.View;
 import common.controller.Controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -13,13 +14,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 
-public class AddSong extends View {
-    AddSong(Controller controller, Stage window) {
+public class UploadSong extends View {
+    public UploadSong(Controller controller, Stage window) {
         super(controller, window);
+        window.initModality(Modality.APPLICATION_MODAL);
         SetTitle("Add Song");
         window.setResizable(false);
     }
