@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -15,13 +14,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.File;
 
 public class AddSong extends View {
     AddSong(Controller controller, Stage window) {
         super(controller, window);
+        SetTitle("Add Song");
+        window.setResizable(false);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AddSong extends View {
         FlowPane root = new FlowPane(Orientation.VERTICAL);
 
         //Create scene
-        Scene scene = new Scene(root, 270, 230);
+        Scene scene = new Scene(root, 270, 170);
         scene.setFill(Color.WHITE);
 
         //Create root elements
