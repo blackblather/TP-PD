@@ -6,11 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public abstract class View implements IObserver {
 
     Controller controller;
-    private Stage window;
+    Stage window;
 
     View(Controller controller, Stage window){
         this.controller = controller;
@@ -23,6 +24,10 @@ public abstract class View implements IObserver {
     }
 
     public abstract Scene GetScene();
+
+    void SetOwner(Window owner){
+        window.initOwner(owner);
+    }
 
     public void Show(){
         SetScene(GetScene());
