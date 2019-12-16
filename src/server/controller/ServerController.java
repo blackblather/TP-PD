@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Base64;
 
 /*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
