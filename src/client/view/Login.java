@@ -1,5 +1,6 @@
 package client.view;
 
+import client.model.Token;
 import client.view.modal.Register;
 import common.controller.Controller;
 import javafx.application.Platform;
@@ -7,7 +8,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,8 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Login extends View{
-    public Login(Controller controller, Stage window) {
-        super(controller, window);
+    public Login(Controller controller, Stage window, Token token) {
+        super(controller, window, token);
         SetTitle("Login");
         window.setResizable(false);
     }
@@ -57,7 +61,7 @@ public class Login extends View{
         //Button - Register
         Button btnRegister = new Button("Register");
         btnRegister.setOnAction(event -> {
-            Register register = new Register(controller, new Stage());
+            Register register = new Register(controller, new Stage(), this.token);
             register.Show();
         });
 
@@ -84,11 +88,12 @@ public class Login extends View{
     }
 
     @Override
-    public void OnLoginSuccess(Object ref) {
+    public void OnLoginSuccess(Object ref, String tokenStr) {
         Platform.runLater(
             () -> {
+                this.token.setValue(tokenStr);
                 Close();
-                Lobby lobby = new Lobby(controller, new Stage());
+                Lobby lobby = new Lobby(controller, new Stage(), this.token);
                 lobby.Show();
             }
         );
@@ -102,16 +107,14 @@ public class Login extends View{
     }
 
     @Override
-    public void OnRegisterSuccess(Object ref) {
-        Platform.runLater(
-            this::Close
-        );
+    public void OnRegisterSuccess(Object ref, String tokenStr) {
+        Platform.runLater(this::Close);
     }
 
     @Override
-    public void OnExceptionOccurred(Object ref) {
+    public void OnExceptionOccurred(Object ref, String exceptionName) {
         Platform.runLater(
-            () -> DisplayErrorAlert("Unknown exception","The server is experiencing some problems at the moment.\nPlease try again later")
+            () -> DisplayErrorAlert(exceptionName,"The server is experiencing some problems at the moment.\nPlease try again later")
         );
     }
 }

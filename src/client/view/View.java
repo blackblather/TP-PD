@@ -1,5 +1,6 @@
 package client.view;
 
+import client.model.Token;
 import common.controller.Controller;
 import common.observer.IObserver;
 import javafx.scene.Scene;
@@ -9,14 +10,17 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public abstract class View implements IObserver {
-
+    protected Token token;
     protected Controller controller;
     protected Stage window;
 
-    public View(Controller controller, Stage window){
+
+    public View(Controller controller, Stage window, Token token){
         this.controller = controller;
         this.window = window;
         this.window.getIcons().add(new Image("client/res/icon.png"));
+
+        this.token = token;
 
         IObserver selfObserver = this;
         controller.AddObserver(selfObserver);
@@ -60,13 +64,13 @@ public abstract class View implements IObserver {
     public void Update(Object o) { }
 
     @Override
-    public void OnLoginSuccess(Object ref) { }
+    public void OnLoginSuccess(Object ref, String token) { }
 
     @Override
     public void OnInvalidCredentials(Object ref) { }
 
     @Override
-    public void OnRegisterSuccess(Object ref) { }
+    public void OnRegisterSuccess(Object ref, String token) { }
 
     @Override
     public void OnPasswordsNotMatching(Object ref) { }
@@ -75,5 +79,5 @@ public abstract class View implements IObserver {
     public void OnUsernameNotUnique(Object ref) { }
 
     @Override
-    public void OnExceptionOccurred(Object ref) { }
+    public void OnExceptionOccurred(Object ref, String exceptionName) { }
 }

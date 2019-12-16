@@ -21,10 +21,10 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnLoginSuccess(Object ref) {
+    public void OnLoginSuccess(Object ref, String token) {
         if (ref == this) {
             try {
-                SendMsg("{\"Type\":\"Login\", \"Success\":true}");
+                SendMsg("{\"Type\":\"Login\", \"Success\":true, \"token\":\"" + token + "\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -44,10 +44,10 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnRegisterSuccess(Object ref) {
+    public void OnRegisterSuccess(Object ref, String token) {
         if (ref == this) {
             try {
-                SendMsg("{\"Type\":\"Register\", \"Success\":true}");
+                SendMsg("{\"Type\":\"Register\", \"Success\":true, \"token\":\"" + token + "\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -79,10 +79,10 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnExceptionOccurred(Object ref) {
+    public void OnExceptionOccurred(Object ref, String exceptionName) {
         if (ref == this) {
             try {
-                SendMsg("{\"Type\":\"Exception\"}");
+                SendMsg("{\"Type\":\"Exception\", \"ExceptionName\":\"" + exceptionName + "\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }

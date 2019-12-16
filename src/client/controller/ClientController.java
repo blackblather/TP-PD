@@ -34,18 +34,18 @@ public class ClientController extends Controller {
         if (IsValidJSONResponse(jsonObject)) {
             switch (jsonObject.getString("Type")) {
                 case "Exception": {
-                    Notify(NotificationType.exception);
+                    Notify(NotificationType.exception, jsonObject.getString("ExceptionName"));
                 } break;
                 case "ServerStatus": {/*TODO*/} break;
                 case "Login": {
                     if(jsonObject.getBoolean("Success"))
-                        Notify(NotificationType.loginSuccess);
+                        Notify(NotificationType.loginSuccess, jsonObject.getString("token"));
                     else
                         Notify(NotificationType.loginInvalidCredentials);
                 } break;
                 case "Register": {
                     if(jsonObject.getBoolean("Success"))
-                        Notify(NotificationType.registerSuccess);
+                        Notify(NotificationType.registerSuccess, jsonObject.getString("token"));
                     else
                         switch (jsonObject.getString("ErrorType")){
                             case "PasswordsNotMatching": Notify(NotificationType.registerPasswordsNotMatching); break;

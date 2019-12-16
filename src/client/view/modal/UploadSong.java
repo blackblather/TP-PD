@@ -1,5 +1,6 @@
 package client.view.modal;
 
+import client.model.Token;
 import client.view.View;
 import common.controller.Controller;
 import javafx.geometry.Insets;
@@ -19,8 +20,8 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class UploadSong extends View {
-    public UploadSong(Controller controller, Stage window) {
-        super(controller, window);
+    public UploadSong(Controller controller, Stage window, Token token) {
+        super(controller, window, token);
         window.initModality(Modality.APPLICATION_MODAL);
         SetTitle("Add Song");
         window.setResizable(false);

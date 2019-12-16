@@ -1,5 +1,6 @@
 package client.view.modal;
 
+import client.model.Token;
 import client.view.Lobby;
 import client.view.View;
 import common.controller.Controller;
@@ -8,7 +9,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -18,8 +22,8 @@ import javafx.stage.Stage;
 
 public class Register extends View {
 
-    public Register(Controller controller, Stage window) {
-        super(controller, window);
+    public Register(Controller controller, Stage window, Token token) {
+        super(controller, window, token);
         window.initModality(Modality.APPLICATION_MODAL);
         SetTitle("Register");
         window.setResizable(false);
@@ -88,11 +92,12 @@ public class Register extends View {
     }
 
     @Override
-    public void OnRegisterSuccess(Object ref) {
+    public void OnRegisterSuccess(Object ref, String tokenStr) {
         Platform.runLater(
             () -> {
+                this.token.setValue(tokenStr);
                 Close();
-                Lobby lobby = new Lobby(controller, new Stage());
+                Lobby lobby = new Lobby(controller, new Stage(), this.token);
                 lobby.Show();
             }
         );

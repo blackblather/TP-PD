@@ -1,5 +1,6 @@
 package client.view;
 
+import client.model.Token;
 import client.view.modal.UploadSong;
 import common.controller.Controller;
 import common.model.Music;
@@ -24,8 +25,8 @@ public class Lobby extends View {
 
     private ObservableList<Music> observableMusicList = FXCollections.observableArrayList(musicList);
 
-    public Lobby(Controller controller, Stage window) {
-        super(controller, window);
+    public Lobby(Controller controller, Stage window, Token token) {
+        super(controller, window, token);
         SetTitle("Lobby");
         window.setResizable(false);
     }
@@ -117,7 +118,7 @@ public class Lobby extends View {
         Button btnAddSong = new Button("Add Song");
 
         btnAddSong.setOnAction(actionEvent -> {
-            UploadSong uploadSong = new UploadSong(controller, new Stage());
+            UploadSong uploadSong = new UploadSong(controller, new Stage(), this.token);
             uploadSong.SetOwner(window);
             uploadSong.Show();
 //            if(observableMusicList.size() > 0)

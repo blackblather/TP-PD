@@ -34,20 +34,33 @@ public abstract class Observable {
             obs.Update(o);
     }
 
-    protected void Notify(Object ref, NotificationType type){
+    protected void Notify(Object ref, NotificationType type, String param){
         for (IObserver obs : observers){
-            switch (type){
-                case loginSuccess: obs.OnLoginSuccess(ref); break;
-                case loginInvalidCredentials: obs.OnInvalidCredentials(ref); break;
-                case registerSuccess: obs.OnRegisterSuccess(ref); break;
-                case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
-                case registerUsernameNotUnique: obs.OnUsernameNotUnique(ref); break;
-                case exception: obs.OnExceptionOccurred(ref); break;
+            if(param == null){
+                switch (type){
+                    case loginInvalidCredentials: obs.OnInvalidCredentials(ref); break;
+                    case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
+                    case registerUsernameNotUnique: obs.OnUsernameNotUnique(ref); break;
+                }
+            } else {
+                switch (type){
+                    case loginSuccess: obs.OnLoginSuccess(ref, param); break;
+                    case registerSuccess: obs.OnRegisterSuccess(ref, param); break;
+                    case exception: obs.OnExceptionOccurred(ref, param); break;
+                }
             }
         }
     }
 
+    protected void Notify(Object ref, NotificationType type){
+        Notify(ref, type, null);
+    }
+
+    protected void Notify(NotificationType type, String param){
+        Notify(null, type, param);
+    }
+
     protected void Notify(NotificationType type){
-        Notify(null, type);
+        Notify(null, type, null);
     }
 }

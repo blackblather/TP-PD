@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import common.controller.Controller;
 import org.json.JSONException;
 import org.json.JSONObject;
+import server.controller.exceptions.InvalidCredentialsException;
 
 import java.sql.*;
 import java.util.Base64;
@@ -54,10 +55,42 @@ public class ServerController extends Controller {
         }//end try*/
     }
 
+    //Encoder / Decoder
+    private String GetEncodedCredentials(String username, String password){
+        String decodedCredentials = username + ":" + password;
+        return Base64.getEncoder().encodeToString(decodedCredentials.getBytes());
+    }
+
+    private String GetDecodedCredentials(String encodedCredentials){
+        return new String(Base64.getDecoder().decode(encodedCredentials));
+    }
+
+    //SQL Query Functions
+    private String SqlLogin(String username, String password) throws SQLException, InvalidCredentialsException {
+        String query = "SELECT COUNT(*) as 'total' from users where username = '" + username + "' AND password = '" + password + "'";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if(!rs.next() || rs.getInt("total") != 1)
+            throw new InvalidCredentialsException();
+        return GetEncodedCredentials(username, password);
+    }
+
+    private String SqlRegister(String username, String password) throws SQLException {
+        String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(query);
+        return GetEncodedCredentials(username, password);
+    }
+
+    private void SqlAddMusic(String token, String name, String author, String album, String year, String path){
+
+    }
+
     private boolean IsValidJSONRRequest(JSONObject jsonObject){
         return true;
     }
 
+    //IController implementation
     @Override
     public synchronized void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonStr);
@@ -82,34 +115,22 @@ public class ServerController extends Controller {
         }
     }
 
-    private String GetEncodedCredentials(String username, String password){
-        String decodedCredentials = username + ":" + password;
-        return Base64.getEncoder().encodeToString(decodedCredentials.getBytes());
-    }
-
-    private String GetDecodedCredentials(String encodedCredentials){
-        return new String(Base64.getDecoder().decode(encodedCredentials));
-    }
-
     @Override
     public synchronized void Login(Object ref, String username, String password) {
         System.out.println("GOT LOGIN REQUEST:\nUsername: " + username + "\nPassword: " + password);
-            String query = "SELECT COUNT(*) as 'total' from users where username = '" + username + "' AND password = '" + password + "'";
         try {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            if(rs.next() && rs.getInt("total") == 1)
-                Notify(ref, NotificationType.loginSuccess);                 //TODO: ENVIAR TOKEN AO CLIENTE
-            else
-                Notify(ref, NotificationType.loginInvalidCredentials);
-        } catch (SQLException e ) {
-            Notify(ref, NotificationType.exception);
+            String token = SqlLogin(username, password);
+            Notify(ref, NotificationType.loginSuccess, token);
+        } catch (InvalidCredentialsException e){
+            Notify(ref, NotificationType.loginInvalidCredentials);
+        } catch (SQLException e) {
+            Notify(ref, NotificationType.exception, e.getClass().getName());
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
-                    Notify(ref, NotificationType.exception);
+                    Notify(ref, NotificationType.exception, e.getClass().getName());
                 }
             }
         }
@@ -119,21 +140,19 @@ public class ServerController extends Controller {
     public synchronized void Register(Object ref, String username, String password, String passwordConf) {
         System.out.println("GOT REGISTER REQUEST:\nUsername: " + username + "\nPassword: " + password + "\nPassword Confirmation: " + passwordConf);
         if(password.equals(passwordConf)){
-            String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
             try {
-                stmt = conn.createStatement();
-                stmt.executeUpdate(query);
-                Notify(ref, NotificationType.registerSuccess);              //TODO: ENVIAR TOKEN AO CLIENTE
+                String token = SqlRegister(username, password);
+                Notify(ref, NotificationType.registerSuccess, token);
             } catch (MySQLIntegrityConstraintViolationException e){
                 Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (SQLException e) {
-                Notify(ref, NotificationType.exception);
+                Notify(ref, NotificationType.exception, e.getClass().getName());
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
                     } catch (SQLException e) {
-                        Notify(ref, NotificationType.exception);
+                        Notify(ref, NotificationType.exception, e.getClass().getName());
                     }
                 }
             }
