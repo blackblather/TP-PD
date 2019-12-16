@@ -83,6 +83,7 @@ public class TCPService extends common.network.TCPService implements IObserver {
         if (ref == this) {
             try {
                 SendMsg("{\"Type\":\"Exception\", \"ExceptionName\":\"" + exceptionName + "\"}");
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

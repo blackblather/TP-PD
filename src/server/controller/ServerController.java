@@ -124,13 +124,13 @@ public class ServerController extends Controller {
         } catch (InvalidCredentialsException e){
             Notify(ref, NotificationType.loginInvalidCredentials);
         } catch (SQLException e) {
-            Notify(ref, NotificationType.exception, e.getClass().getName());
+            Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
-                    Notify(ref, NotificationType.exception, e.getClass().getName());
+                    Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
                 }
             }
         }
@@ -146,13 +146,13 @@ public class ServerController extends Controller {
             } catch (MySQLIntegrityConstraintViolationException e){
                 Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (SQLException e) {
-                Notify(ref, NotificationType.exception, e.getClass().getName());
+                Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
                     } catch (SQLException e) {
-                        Notify(ref, NotificationType.exception, e.getClass().getName());
+                        Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
                     }
                 }
             }
