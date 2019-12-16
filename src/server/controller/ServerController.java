@@ -6,6 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Base64;
 
 /*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
     -> SQLInjection
@@ -81,6 +83,15 @@ public class ServerController extends Controller {
         }
     }
 
+    private String GetEncodedCredentials(String username, String password){
+        String decodedCredentials = username + ":" + password;
+        return Base64.getEncoder().encodeToString(decodedCredentials.getBytes());
+    }
+
+    private String GetDecodedCredentials(String encodedCredentials){
+        return new String(Base64.getDecoder().decode(encodedCredentials));
+    }
+
     @Override
     public synchronized void Login(Object ref, String username, String password) {
         System.out.println("GOT LOGIN REQUEST:\nUsername: " + username + "\nPassword: " + password);
@@ -89,7 +100,7 @@ public class ServerController extends Controller {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(rs.next() && rs.getInt("total") == 1)
-                Notify(ref, NotificationType.loginSuccess);
+                Notify(ref, NotificationType.loginSuccess);                 //TODO: ENVIAR TOKEN AO CLIENTE
             else
                 Notify(ref, NotificationType.loginInvalidCredentials);
         } catch (SQLException e ) {
@@ -113,7 +124,7 @@ public class ServerController extends Controller {
             try {
                 stmt = conn.createStatement();
                 stmt.executeUpdate(query);
-                Notify(ref, NotificationType.registerSuccess);
+                Notify(ref, NotificationType.registerSuccess);              //TODO: ENVIAR TOKEN AO CLIENTE
             } catch (MySQLIntegrityConstraintViolationException e){
                 Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (SQLException e) {
@@ -132,42 +143,42 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void AddMusic(Object ref, String username, String name, String author, String album, String year, String path) {
+    public synchronized void AddMusic(Object ref,  String token, String name, String author, String album, String year, String path) {
 
     }
 
     @Override
-    public synchronized void AddPlaylist(Object ref, String username, String name) {
+    public synchronized void AddPlaylist(Object ref, String token, String name) {
 
     }
 
     @Override
-    public synchronized void RemoveMusic(Object ref, String name) {
+    public synchronized void RemoveMusic(Object ref, String token,  String name) {
 
     }
 
     @Override
-    public synchronized void RemovePlaylist(Object ref, String name) {
+    public synchronized void RemovePlaylist(Object ref, String token,  String name) {
 
     }
 
     @Override
-    public synchronized void GetMusics(Object ref) {
+    public synchronized void GetMusics(Object ref, String token) {
 
     }
 
     @Override
-    public synchronized void GetMusic(Object ref, String name) {
+    public synchronized void GetMusic(Object ref, String token,  String name) {
 
     }
 
     @Override
-    public synchronized void GetPlaylists(Object ref) {
+    public synchronized void GetPlaylists(Object ref, String token) {
 
     }
 
     @Override
-    public synchronized void GetPlaylist(Object ref, String name) {
+    public synchronized void GetPlaylist(Object ref, String token,  String name) {
 
     }
 

@@ -91,42 +91,42 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void AddMusic(Object ref, String username, String name, String author, String album, String year, String path) {
+    public void AddMusic(Object ref, String token, String name, String author, String album, String year, String path) {
 
     }
 
     @Override
-    public void AddPlaylist(Object ref, String username, String name) {
+    public void AddPlaylist(Object ref, String token, String name) {
 
     }
 
     @Override
-    public void RemoveMusic(Object ref, String name) {
+    public void RemoveMusic(Object ref, String token, String name) {
 
     }
 
     @Override
-    public void RemovePlaylist(Object ref, String name) {
+    public void RemovePlaylist(Object ref, String token, String name) {
 
     }
 
     @Override
-    public void GetMusics(Object ref) {
+    public void GetMusics(Object ref, String token) {
 
     }
 
     @Override
-    public void GetMusic(Object ref, String name) {
+    public void GetMusic(Object ref, String token, String name) {
 
     }
 
     @Override
-    public void GetPlaylists(Object ref) {
+    public void GetPlaylists(Object ref, String token) {
 
     }
 
     @Override
-    public void GetPlaylist(Object ref, String name) {
+    public void GetPlaylist(Object ref, String token, String name) {
 
     }
 
