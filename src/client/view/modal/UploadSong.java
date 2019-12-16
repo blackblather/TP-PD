@@ -2,15 +2,12 @@ package client.view.modal;
 
 import client.view.View;
 import common.controller.Controller;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -77,11 +74,11 @@ public class UploadSong extends View {
         Button btnFindFile = new Button("Open");
         btnFindFile.setPrefWidth(75);
 
+        //Set btnFindFile onAction event
         btnFindFile.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select file to open");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                    new FileChooser.ExtensionFilter("All files", "*.*"));
+            fileChooser.setTitle("Select to open");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null)
                 txtFilePath.setText(selectedFile.getAbsolutePath());
