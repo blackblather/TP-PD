@@ -91,7 +91,7 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void AddMusic(Object ref, String token, String name, String author, String album, String year, String path) {
+    public void AddMusic(Object ref, String token, String name, String author, String album, Integer year, String path) {
 
     }
 

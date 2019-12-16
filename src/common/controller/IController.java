@@ -7,7 +7,7 @@ public interface IController {
     void Login(Object ref, String username, String password);
     void Register(Object ref, String username, String password, String passwordConf);
     //INSERT OPERATIONS
-    void AddMusic(Object ref, String token, String name, String author, String album, String year, String path);
+    void AddMusic(Object ref, String token, String name, String author, String album, Integer year, String path);
     void AddPlaylist(Object ref, String token, String name);
     //DELETE OPERATIONS
     void RemoveMusic(Object ref, String token, String name);

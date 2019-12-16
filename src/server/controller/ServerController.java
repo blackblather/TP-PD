@@ -144,6 +144,7 @@ public class ServerController extends Controller {
                 String token = SqlRegister(username, password);
                 Notify(ref, NotificationType.registerSuccess, token);
             } catch (MySQLIntegrityConstraintViolationException e){
+                //No contexto desta função, a unica constraint violation possivel, é quando se tenta inserir usernames identicos
                 Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (SQLException e) {
                 Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
@@ -161,7 +162,7 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void AddMusic(Object ref,  String token, String name, String author, String album, String year, String path) {
+    public synchronized void AddMusic(Object ref,  String token, String name, String author, String album, Integer year, String path) {
 
     }
 
