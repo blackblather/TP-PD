@@ -162,7 +162,7 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void AddMusic(Object ref,  String token, String name, String author, String album, Integer year, String path) {
+    public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
 
     }
 
@@ -172,7 +172,7 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void RemoveMusic(Object ref, String token,  String name) {
+    public synchronized void RemoveSong(Object ref, String token, String name) {
 
     }
 
@@ -182,12 +182,12 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void GetMusics(Object ref, String token) {
+    public synchronized void GetSongs(Object ref, String token) {
 
     }
 
     @Override
-    public synchronized void GetMusic(Object ref, String token,  String name) {
+    public synchronized void GetSong(Object ref, String token, String name) {
 
     }
 

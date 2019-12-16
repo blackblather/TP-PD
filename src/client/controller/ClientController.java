@@ -91,7 +91,7 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void AddMusic(Object ref, String token, String name, String author, String album, Integer year, String path) {
+    public void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
 
     }
 
@@ -101,7 +101,7 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void RemoveMusic(Object ref, String token, String name) {
+    public void RemoveSong(Object ref, String token, String name) {
 
     }
 
@@ -111,12 +111,12 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void GetMusics(Object ref, String token) {
+    public void GetSongs(Object ref, String token) {
 
     }
 
     @Override
-    public void GetMusic(Object ref, String token, String name) {
+    public void GetSong(Object ref, String token, String name) {
 
     }
 
