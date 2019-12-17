@@ -40,7 +40,7 @@ public class UploadSong extends View {
         FlowPane root = new FlowPane();
 
         //Create scene
-        Scene scene = new Scene(root, 270, 170);
+        Scene scene = new Scene(root, 270, 400);
         scene.setFill(Color.WHITE);
 
         //Create root elements
@@ -94,8 +94,10 @@ public class UploadSong extends View {
         //Button - Add Song
         Button btnAddSong = new Button("Add Song");
         btnAddSong.setDisable(true);
-        btnAddSong.setOnAction(event -> {
 
+        btnAddSong.setOnAction(event -> {
+            //Object ref,  String token, String name, String author, String album, String year, String path
+            controller.AddSong(null, token.getValue(), txtSongName.getText(), null, null, null, txtFilePath.getText());
         });
 
         //Textbox listeners

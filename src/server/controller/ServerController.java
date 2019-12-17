@@ -5,6 +5,7 @@ import common.controller.Controller;
 import org.json.JSONException;
 import org.json.JSONObject;
 import server.controller.exceptions.InvalidCredentialsException;
+import server.controller.exceptions.InvalidToken;
 
 import java.sql.*;
 import java.util.Base64;
@@ -61,8 +62,14 @@ public class ServerController extends Controller {
         return Base64.getEncoder().encodeToString(decodedCredentials.getBytes());
     }
 
-    private String GetDecodedCredentials(String encodedCredentials){
-        return new String(Base64.getDecoder().decode(encodedCredentials));
+    private String[] GetDecodedCredentials(String encodedCredentials) throws InvalidToken {
+        String decodedCredentialsStr = new String(Base64.getDecoder().decode(encodedCredentials));
+        String[] decodedCredentials = decodedCredentialsStr.split(":");
+
+        if(decodedCredentials.length != 2)
+            throw new InvalidToken();
+
+        return decodedCredentials;
     }
 
     //SQL Query Functions
@@ -82,8 +89,11 @@ public class ServerController extends Controller {
         return GetEncodedCredentials(username, password);
     }
 
-    private void SqlAddMusic(String token, String name, String author, String album, String year, String path){
-
+    private void SqlAddMusic(String token, String name, String author, String album, Integer year, String path) throws SQLException, InvalidToken {
+        String[] decodedCredentials = GetDecodedCredentials(token);
+        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano, path) VALUES ((SELECT id_users FROM users WHERE username = \"" + decodedCredentials[0] + "\" AND password = \"" + decodedCredentials[1] + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
+        stmt = conn.createStatement();
+        stmt.executeUpdate(query);
     }
 
     private boolean IsValidJSONRRequest(JSONObject jsonObject){
@@ -163,7 +173,13 @@ public class ServerController extends Controller {
 
     @Override
     public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
-
+        try {
+            SqlAddMusic(token, name, author, album, year, path);
+        } catch (InvalidToken invalidToken) {
+            invalidToken.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
