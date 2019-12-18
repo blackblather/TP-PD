@@ -1,14 +1,18 @@
 package server.controller;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import common.IWT.Payload;
+import common.IWT.Token;
+import common.IWT.Tokenizer;
+import common.IWT.exceptions.InvalidTokenException;
 import common.controller.Controller;
 import org.json.JSONException;
 import org.json.JSONObject;
 import server.controller.exceptions.InvalidCredentialsException;
-import server.controller.exceptions.InvalidToken;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.Base64;
 
 /*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
     -> SQLInjection
@@ -30,8 +34,15 @@ public class ServerController extends Controller {
     Connection conn = null;
     Statement stmt = null;
 
+    //Tokens
+    private final String key = "501eaafea5db8a40f3b889709db44bea";
+    private Tokenizer tokenizer;
+
     public ServerController(){
         try{
+            //Initializes tokenizer
+            tokenizer = new Tokenizer(key);
+
             //Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
@@ -56,42 +67,28 @@ public class ServerController extends Controller {
         }//end try*/
     }
 
-    //Encoder / Decoder
-    private String GetEncodedCredentials(String username, String password){
-        String decodedCredentials = username + ":" + password;
-        return Base64.getEncoder().encodeToString(decodedCredentials.getBytes());
-    }
-
-    private String[] GetDecodedCredentials(String encodedCredentials) throws InvalidToken {
-        String decodedCredentialsStr = new String(Base64.getDecoder().decode(encodedCredentials));
-        String[] decodedCredentials = decodedCredentialsStr.split(":");
-
-        if(decodedCredentials.length != 2)
-            throw new InvalidToken();
-
-        return decodedCredentials;
-    }
-
     //SQL Query Functions
-    private String SqlLogin(String username, String password) throws SQLException, InvalidCredentialsException {
+    private Token SqlLogin(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeyException, InvalidCredentialsException {
         String query = "SELECT COUNT(*) as 'total' from users where username = '" + username + "' AND password = '" + password + "'";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         if(!rs.next() || rs.getInt("total") != 1)
             throw new InvalidCredentialsException();
-        return GetEncodedCredentials(username, password);
+        tokenizer.setPayload(new Payload(username));
+        return tokenizer.GetToken();
     }
 
-    private String SqlRegister(String username, String password) throws SQLException {
+    private Token SqlRegister(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeyException {
         String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
-        return GetEncodedCredentials(username, password);
+        tokenizer.setPayload(new Payload(username));
+        return tokenizer.GetToken();
     }
 
-    private void SqlAddMusic(String token, String name, String author, String album, Integer year, String path) throws SQLException, InvalidToken {
-        String[] decodedCredentials = GetDecodedCredentials(token);
-        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano, path) VALUES ((SELECT id_users FROM users WHERE username = \"" + decodedCredentials[0] + "\" AND password = \"" + decodedCredentials[1] + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
+    private void SqlAddMusic(String tokenStr, String name, String author, String album, Integer year, String path) throws SQLException, InvalidTokenException {
+        Payload payload = tokenizer.GetPayloadFromToken(new Token(tokenStr));
+        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano, path) VALUES ((SELECT id_users FROM users WHERE username = \"" + payload.GetUsername() + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
     }
@@ -113,7 +110,9 @@ public class ServerController extends Controller {
                 case "Register": {
                     Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
                 } break;
-                case "AddMusic": {/*TODO*/} break;
+                case "AddSong": {
+                    AddSong(ref, jsonContent.getString("token"), jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), jsonContent.getString("path"));
+                } break;
                 case "AddPlaylist": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
                 case "RemovePlaylist": {/*TODO*/} break;
@@ -129,11 +128,11 @@ public class ServerController extends Controller {
     public synchronized void Login(Object ref, String username, String password) {
         System.out.println("GOT LOGIN REQUEST:\nUsername: " + username + "\nPassword: " + password);
         try {
-            String token = SqlLogin(username, password);
-            Notify(ref, NotificationType.loginSuccess, token);
+            Token token = SqlLogin(username, password);
+            Notify(ref, NotificationType.loginSuccess, token.toString());
         } catch (InvalidCredentialsException e){
             Notify(ref, NotificationType.loginInvalidCredentials);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
         } finally {
             if (stmt != null) {
@@ -151,12 +150,12 @@ public class ServerController extends Controller {
         System.out.println("GOT REGISTER REQUEST:\nUsername: " + username + "\nPassword: " + password + "\nPassword Confirmation: " + passwordConf);
         if(password.equals(passwordConf)){
             try {
-                String token = SqlRegister(username, password);
-                Notify(ref, NotificationType.registerSuccess, token);
+                Token token = SqlRegister(username, password);
+                Notify(ref, NotificationType.registerSuccess, token.toString());
             } catch (MySQLIntegrityConstraintViolationException e){
                 //No contexto desta função, a unica constraint violation possivel, é quando se tenta inserir usernames identicos
                 Notify(ref, NotificationType.registerUsernameNotUnique);
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
             } finally {
                 if (stmt != null) {
@@ -175,10 +174,9 @@ public class ServerController extends Controller {
     public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
         try {
             SqlAddMusic(token, name, author, album, year, path);
-        } catch (InvalidToken invalidToken) {
-            invalidToken.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            Notify(ref, NotificationType.addSongSuccess);
+        } catch (Exception e) {
+            Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
         }
     }
 
