@@ -1,7 +1,7 @@
 package client.view;
 
-import client.model.Token;
 import client.view.modal.Register;
+import common.IWT.Token;
 import common.controller.Controller;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -91,7 +91,7 @@ public class Login extends View{
     public void OnLoginSuccess(Object ref, String tokenStr) {
         Platform.runLater(
             () -> {
-                this.token.setValue(tokenStr);
+                this.token.SetValue(tokenStr);
                 Close();
                 Lobby lobby = new Lobby(controller, new Stage(), this.token);
                 lobby.Show();
