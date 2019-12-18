@@ -53,7 +53,10 @@ public class ClientController extends Controller {
                         }
 
                 } break;
-                case "AddMusic": {/*TODO*/} break;
+                case "AddSong": {
+                    if(jsonObject.getBoolean("Success"))
+                        Notify(NotificationType.addSongSuccess);
+                } break;
                 case "AddPlaylist": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
                 case "RemovePlaylist": {/*TODO*/} break;
@@ -92,7 +95,13 @@ public class ClientController extends Controller {
 
     @Override
     public void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
-
+        try {
+            //Convert to JSONObject
+            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + name + "\", \"author\":\"" + author + "\", \"album\":\"" + album + "\", \"year\":" + year + ", \"path\":\"" + path + "\"}}";
+            tcpService.SendMsg(jsonStr);
+        } catch (IOException e){
+            Notify(NotificationType.exception);
+        }
     }
 
     @Override
