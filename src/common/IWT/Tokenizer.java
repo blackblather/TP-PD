@@ -16,22 +16,15 @@ public class Tokenizer {
 
     private final String MACHashFunction = "HmacSHA256";
     private Mac HMAC_SHA256;
-    private final String key;
-    private Payload payload;
 
     public Tokenizer(String key) throws InvalidKeyException, NoSuchAlgorithmException {
-        this.key = key;
         //Instantiates HMAC_SHA256 object
         HMAC_SHA256 = Mac.getInstance(MACHashFunction);
         //Sets private key
         HMAC_SHA256.init(new SecretKeySpec(key.getBytes(), MACHashFunction));
     }
 
-    public void setPayload(Payload payload) {
-        this.payload = payload;
-    }
-
-    public Token GetToken() throws InvalidKeyException {
+    public Token GetToken(Payload payload) throws InvalidKeyException {
         //Gets payload encoded in base64
         String payloadBase64 = Base64.getEncoder().encodeToString(payload.toJSONObject().toString().getBytes());
         //Gets "signature" byte array
@@ -42,7 +35,7 @@ public class Tokenizer {
         return new Token(authorizationType + payloadBase64 + separator + signatureBase64);
     }
 
-    public Payload GetPayloadFromToken(Token token) throws JSONException, InvalidTokenException {
+    public Payload GetPayload(Token token) throws JSONException, InvalidTokenException {
         String tokenStr = token.toString();
 
         //Checks if token starts with correct authorization type

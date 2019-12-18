@@ -74,20 +74,18 @@ public class ServerController extends Controller {
         ResultSet rs = stmt.executeQuery(query);
         if(!rs.next() || rs.getInt("total") != 1)
             throw new InvalidCredentialsException();
-        tokenizer.setPayload(new Payload(username));
-        return tokenizer.GetToken();
+        return tokenizer.GetToken(new Payload(username));
     }
 
     private Token SqlRegister(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeyException {
         String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
-        tokenizer.setPayload(new Payload(username));
-        return tokenizer.GetToken();
+        return tokenizer.GetToken(new Payload(username));
     }
 
     private void SqlAddMusic(String tokenStr, String name, String author, String album, Integer year, String path) throws SQLException, InvalidTokenException {
-        Payload payload = tokenizer.GetPayloadFromToken(new Token(tokenStr));
+        Payload payload = tokenizer.GetPayload(new Token(tokenStr));
         String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano, path) VALUES ((SELECT id_users FROM users WHERE username = \"" + payload.GetUsername() + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
