@@ -12,6 +12,7 @@ public abstract class Observable {
         registerSuccess,
         registerPasswordsNotMatching,
         registerUsernameNotUnique,
+        addSongSuccess,
         exception
     }
 
@@ -41,6 +42,7 @@ public abstract class Observable {
                     case loginInvalidCredentials: obs.OnInvalidCredentials(ref); break;
                     case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
                     case registerUsernameNotUnique: obs.OnUsernameNotUnique(ref); break;
+                    case addSongSuccess: obs.OnAddSongSuccess(ref); break;
                 }
             } else {
                 switch (type){
