@@ -79,6 +79,17 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
+    public void OnAddSongSuccess(Object ref) {
+        if (ref == this) {
+            try {
+                SendMsg("{\"Type\":\"AddSong\", \"Success\":true}");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
     public void OnExceptionOccurred(Object ref, String exceptionName) {
         if (ref == this) {
             try {

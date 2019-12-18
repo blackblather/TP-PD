@@ -1,6 +1,6 @@
 package client.view;
 
-import client.model.Token;
+import common.IWT.Token;
 import common.controller.Controller;
 import common.observer.IObserver;
 import javafx.scene.Scene;
@@ -77,6 +77,9 @@ public abstract class View implements IObserver {
 
     @Override
     public void OnUsernameNotUnique(Object ref) { }
+
+    @Override
+    public void OnAddSongSuccess(Object ref) { }
 
     @Override
     public void OnExceptionOccurred(Object ref, String exceptionName) { }
