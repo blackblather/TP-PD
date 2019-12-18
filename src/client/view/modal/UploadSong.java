@@ -1,8 +1,9 @@
 package client.view.modal;
 
-import client.model.Token;
 import client.view.View;
+import common.IWT.Token;
 import common.controller.Controller;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -97,7 +98,7 @@ public class UploadSong extends View {
 
         btnAddSong.setOnAction(event -> {
             //Object ref,  String token, String name, String author, String album, String year, String path
-            controller.AddSong(null, token.getValue(), txtSongName.getText(), null, null, null, txtFilePath.getText());
+            controller.AddSong(null, token.toString(), txtSongName.getText(), null, null, 1995, txtFilePath.getText());
         });
 
         //Textbox listeners
@@ -117,5 +118,12 @@ public class UploadSong extends View {
         root.getChildren().add(vBox);
 
         return scene;
+    }
+
+    @Override
+    public void OnAddSongSuccess(Object ref) {
+        Platform.runLater(
+            () -> DisplayErrorAlert("GREAT SUCCESS","YE BOYE")
+        );
     }
 }
