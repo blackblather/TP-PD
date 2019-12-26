@@ -3,6 +3,7 @@ package client.view.modal;
 import client.view.View;
 import common.IWT.Token;
 import common.controller.Controller;
+import common.thread.FileTransferThread;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +22,8 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class UploadSong extends View {
+    private TextField txtFilePath;
+
     public UploadSong(Controller controller, Stage window, Token token) {
         super(controller, window, token);
         window.initModality(Modality.APPLICATION_MODAL);
@@ -70,7 +73,7 @@ public class UploadSong extends View {
         hBoxTxtBtn.setPrefWidth(scene.getWidth());
 
         //Textbox - File Path
-        TextField txtFilePath = new TextField();
+        txtFilePath = new TextField();
 
         //Button - Find File
         Button btnFindFile = new Button("Open");
@@ -97,8 +100,9 @@ public class UploadSong extends View {
         btnAddSong.setDisable(true);
 
         btnAddSong.setOnAction(event -> {
-            //Object ref,  String token, String name, String author, String album, String year, String path
-            controller.AddSong(null, token.toString(), txtSongName.getText(), null, null, 1995, txtFilePath.getText());
+                               //Object ref, String token, String name, String author, String album, String year
+            controller.AddSong(null, token.toString(), txtSongName.getText(), null, null, 1995);
+            //new thread (timeout 10s)
         });
 
         //Textbox listeners
@@ -125,5 +129,11 @@ public class UploadSong extends View {
         Platform.runLater(
             () -> DisplayErrorAlert("GREAT SUCCESS","YE BOYE")
         );
+    }
+
+    @Override
+    public void OnReadyForUpload(Object ref, String hostname, Integer port) {
+        FileTransferThread fileTransferThread = new FileTransferThread(controller, hostname, port);
+        fileTransferThread.SendFile(txtFilePath.getText());
     }
 }

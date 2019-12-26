@@ -82,5 +82,11 @@ public abstract class View implements IObserver {
     public void OnAddSongSuccess(Object ref) { }
 
     @Override
+    public void OnReadyForUpload(Object ref, String hostname, Integer port) { }
+
+    @Override
+    public void OnReadyForDownload(Object ref, String hostname, Integer port) { }
+
+    @Override
     public void OnExceptionOccurred(Object ref, String exceptionName) { }
 }

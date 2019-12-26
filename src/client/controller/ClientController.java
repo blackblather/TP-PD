@@ -57,6 +57,9 @@ public class ClientController extends Controller {
                     if(jsonObject.getBoolean("Success"))
                         Notify(NotificationType.addSongSuccess);
                 } break;
+                case "ReadyForUpload":{
+                    Notify(NotificationType.readyForUpload, jsonObject.getString("hostname"), jsonObject.getInt("port"));
+                }
                 case "AddPlaylist": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
                 case "RemovePlaylist": {/*TODO*/} break;
@@ -94,10 +97,10 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
+    public void AddSong(Object ref, String token, String name, String author, String album, Integer year) {
         try {
             //Convert to JSONObject
-            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + name + "\", \"author\":\"" + author + "\", \"album\":\"" + album + "\", \"year\":" + year + ", \"path\":\"" + path + "\"}}";
+            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + name + "\", \"author\":\"" + author + "\", \"album\":\"" + album + "\", \"year\":" + year + "}}";
             tcpService.SendMsg(jsonStr);
         } catch (IOException e){
             Notify(NotificationType.exception);

@@ -90,6 +90,22 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
+    public void OnReadyForUpload(Object ref, String hostname, Integer port) {
+        if (ref == this) {
+            try {
+                SendMsg("{\"Type\":\"ReadyForUpload\", \"hostname\":\"" + hostname + "\", \"port\":" + port + "}");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void OnReadyForDownload(Object ref, String hostname, Integer port) {
+
+    }
+
+    @Override
     public void OnExceptionOccurred(Object ref, String exceptionName) {
         if (ref == this) {
             try {

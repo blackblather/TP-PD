@@ -6,10 +6,12 @@ import common.IWT.Token;
 import common.IWT.Tokenizer;
 import common.IWT.exceptions.InvalidTokenException;
 import common.controller.Controller;
+import common.thread.FileTransferThread;
 import org.json.JSONException;
 import org.json.JSONObject;
 import server.controller.exceptions.InvalidCredentialsException;
 
+import java.net.ServerSocket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -84,9 +86,10 @@ public class ServerController extends Controller {
         return tokenizer.GetToken(new Payload(username));
     }
 
-    private void SqlAddMusic(String tokenStr, String name, String author, String album, Integer year, String path) throws SQLException, InvalidTokenException {
+    private void SqlAddMusic(String tokenStr, String name, String author, String album, Integer year) throws SQLException, InvalidTokenException {
         Payload payload = tokenizer.GetPayload(new Token(tokenStr));
-        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano, path) VALUES ((SELECT id_users FROM users WHERE username = \"" + payload.GetUsername() + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
+        String path = "SOME RANDOM FILE NAME";  //TODO
+        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano) VALUES ((SELECT id_users FROM users WHERE username = \"" + payload.GetUsername() + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
     }
@@ -109,7 +112,7 @@ public class ServerController extends Controller {
                     Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
                 } break;
                 case "AddSong": {
-                    AddSong(ref, jsonContent.getString("token"), jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), jsonContent.getString("path"));
+                    AddSong(ref, jsonContent.getString("token"), jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"));
                 } break;
                 case "AddPlaylist": {/*TODO*/} break;
                 case "RemoveMusic": {/*TODO*/} break;
@@ -169,10 +172,19 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year, String path) {
+    public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year) {
         try {
-            SqlAddMusic(token, name, author, album, year, path);
-            Notify(ref, NotificationType.addSongSuccess);
+            //Create server socket to accept tcp connection for file transfer
+            ServerSocket fileTransferServerSocket = new ServerSocket(0);
+            //Notify observers before blocking in accept(). Sends hostname and port
+            Notify(ref, NotificationType.readyForUpload, fileTransferServerSocket.getInetAddress().getHostName(), fileTransferServerSocket.getLocalPort());
+            //Initialize "file transfer thread"
+            FileTransferThread fileTransferThread = new FileTransferThread(this, ref, fileTransferServerSocket);
+            //Start "file transfer thread" for receiving file
+            fileTransferThread.ReceiveFile("C:\\Users\\joaom\\Desktop\\MySongLol.mp3");    //TODO
+
+            //SqlAddMusic(token, name, author, album, year);
+            //Notify(ref, NotificationType.addSongSuccess);
         } catch (Exception e) {
             Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
         }

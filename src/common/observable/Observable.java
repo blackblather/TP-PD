@@ -13,6 +13,8 @@ public abstract class Observable {
         registerPasswordsNotMatching,
         registerUsernameNotUnique,
         addSongSuccess,
+        readyForUpload,
+        readyForDownload,
         exception
     }
 
@@ -30,14 +32,9 @@ public abstract class Observable {
         observers.remove(o);
     }
 
-    protected void Notify(Object o){
-        for (IObserver obs : observers)
-            obs.Update(o);
-    }
-
-    protected void Notify(Object ref, NotificationType type, String param){
+    public void Notify(Object ref, NotificationType type, Object... params){
         for (IObserver obs : observers){
-            if(param == null){
+            if(params.length == 0){
                 switch (type){
                     case loginInvalidCredentials: obs.OnInvalidCredentials(ref); break;
                     case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
@@ -46,23 +43,47 @@ public abstract class Observable {
                 }
             } else {
                 switch (type){
-                    case loginSuccess: obs.OnLoginSuccess(ref, param); break;
-                    case registerSuccess: obs.OnRegisterSuccess(ref, param); break;
-                    case exception: obs.OnExceptionOccurred(ref, param); break;
+                    case loginSuccess:{
+                        //params[0] -> (String) token
+                        if(params.length == 1 & params[0] instanceof String)
+                            obs.OnLoginSuccess(ref, (String) params[0]);
+                    } break;
+                    case registerSuccess:{
+                        //params[0] -> (String) token
+                        if(params.length == 1 & params[0] instanceof String)
+                            obs.OnRegisterSuccess(ref, (String) params[0]);
+                    } break;
+                    case readyForUpload:{
+                        //params[0] -> (String) hostname
+                        //params[1] -> (Integer) port
+                        if (params.length == 2 && params[0] instanceof String && params[1] instanceof Integer)
+                            obs.OnReadyForUpload(ref, (String) params[0], (Integer) params[1]);
+                    } break;
+                    case readyForDownload:{
+                        //params[0] -> (String) hostname
+                        //params[1] -> (Integer) port
+                        if (params.length == 2 && params[0] instanceof String && params[1] instanceof Integer)
+                            obs.OnReadyForDownload(ref, (String) params[0], (Integer) params[1]);
+                    } break;
+                    case exception:{
+                        //params[0] -> (String) exception simple name
+                        if(params.length == 1 & params[0] instanceof String)
+                            obs.OnExceptionOccurred(ref, (String) params[0]);
+                    } break;
                 }
             }
         }
     }
 
     protected void Notify(Object ref, NotificationType type){
-        Notify(ref, type, null);
+        Notify(ref, type);
     }
 
-    protected void Notify(NotificationType type, String param){
+    protected void Notify(NotificationType type, Object... param){
         Notify(null, type, param);
     }
 
     protected void Notify(NotificationType type){
-        Notify(null, type, null);
+        Notify(null, type);
     }
 }
