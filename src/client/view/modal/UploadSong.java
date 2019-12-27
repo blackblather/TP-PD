@@ -106,8 +106,12 @@ public class UploadSong extends View {
         });
 
         //Textbox listeners
-        txtSongName.setOnKeyTyped(keyEvent -> ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath));
-        txtFilePath.setOnKeyTyped(keyEvent -> ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath));
+        txtSongName.textProperty().addListener((observable, oldValue, newValue) -> {
+            ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath);
+        });
+        txtFilePath.textProperty().addListener((observable, oldValue, newValue) -> {
+            ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath);
+        });
 
         //Add children to hBox
         hBox.getChildren().addAll(btnAddSong);
