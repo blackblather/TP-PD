@@ -13,7 +13,6 @@ import server.controller.exceptions.InvalidCredentialsException;
 
 import java.net.ServerSocket;
 import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 /*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
@@ -70,7 +69,7 @@ public class ServerController extends Controller {
     }
 
     //SQL Query Functions
-    private Token SqlLogin(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeyException, InvalidCredentialsException {
+    private Token SqlLogin(String username, String password) throws SQLException, InvalidKeyException, InvalidCredentialsException {
         String query = "SELECT COUNT(*) as 'total' from users where username = '" + username + "' AND password = '" + password + "'";
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -79,7 +78,7 @@ public class ServerController extends Controller {
         return tokenizer.GetToken(new Payload(username));
     }
 
-    private Token SqlRegister(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeyException {
+    private Token SqlRegister(String username, String password) throws SQLException, InvalidKeyException {
         String query = "INSERT INTO users (id_users, username, password) VALUES (NULL, '" + username + "', '" + password + "')";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
