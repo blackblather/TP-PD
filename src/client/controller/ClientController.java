@@ -22,52 +22,45 @@ public class ClientController extends Controller {
 
     }
 
-    private boolean IsValidJSONResponse(JSONObject jsonObject){
-        //TODO
-        return true;
-    }
-
     @Override
     public void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
         //Example: {"Type":"Login","Content":{"username":"blackBladder","password":"blueNails"}}
         JSONObject jsonObject = new JSONObject(jsonStr);
-        if (IsValidJSONResponse(jsonObject)) {
-            switch (jsonObject.getString("Type")) {
-                case "Exception": {
-                    Notify(NotificationType.exception, jsonObject.getString("ExceptionName"));
-                } break;
-                case "ServerStatus": {/*TODO*/} break;
-                case "Login": {
-                    if(jsonObject.getBoolean("Success"))
-                        Notify(NotificationType.loginSuccess, jsonObject.getString("token"));
-                    else
-                        Notify(NotificationType.loginInvalidCredentials);
-                } break;
-                case "Register": {
-                    if(jsonObject.getBoolean("Success"))
-                        Notify(NotificationType.registerSuccess, jsonObject.getString("token"));
-                    else
-                        switch (jsonObject.getString("ErrorType")){
-                            case "PasswordsNotMatching": Notify(NotificationType.registerPasswordsNotMatching); break;
-                            case "UsernameNotUnique": Notify(NotificationType.registerUsernameNotUnique); break;
-                        }
+        switch (jsonObject.getString("Type")) {
+            case "Exception": {
+                Notify(NotificationType.exception, jsonObject.getString("ExceptionName"));
+            } break;
+            case "ServerStatus": {/*TODO*/} break;
+            case "Login": {
+                if(jsonObject.getBoolean("Success"))
+                    Notify(NotificationType.loginSuccess, jsonObject.getString("token"));
+                else
+                    Notify(NotificationType.loginInvalidCredentials);
+            } break;
+            case "Register": {
+                if(jsonObject.getBoolean("Success"))
+                    Notify(NotificationType.registerSuccess, jsonObject.getString("token"));
+                else
+                    switch (jsonObject.getString("ErrorType")){
+                        case "PasswordsNotMatching": Notify(NotificationType.registerPasswordsNotMatching); break;
+                        case "UsernameNotUnique": Notify(NotificationType.registerUsernameNotUnique); break;
+                    }
 
-                } break;
-                case "AddSong": {
-                    if(jsonObject.getBoolean("Success"))
-                        Notify(NotificationType.addSongSuccess);
-                } break;
-                case "ReadyForUpload":{
-                    Notify(NotificationType.readyForUpload, jsonObject.getString("hostname"), jsonObject.getInt("port"));
-                }
-                case "AddPlaylist": {/*TODO*/} break;
-                case "RemoveMusic": {/*TODO*/} break;
-                case "RemovePlaylist": {/*TODO*/} break;
-                case "GetMusics": {/*TODO*/} break;
-                case "GetMusic": {/*TODO*/} break;
-                case "GetPlaylists": {/*TODO*/} break;
-                case "GetPlaylist": {/*TODO*/} break;
+            } break;
+            case "AddSong": {
+                if(jsonObject.getBoolean("Success"))
+                    Notify(NotificationType.addSongSuccess);
+            } break;
+            case "ReadyForUpload":{
+                Notify(NotificationType.readyForUpload, jsonObject.getString("hostname"), jsonObject.getInt("port"));
             }
+            case "AddPlaylist": {/*TODO*/} break;
+            case "RemoveMusic": {/*TODO*/} break;
+            case "RemovePlaylist": {/*TODO*/} break;
+            case "GetMusics": {/*TODO*/} break;
+            case "GetMusic": {/*TODO*/} break;
+            case "GetPlaylists": {/*TODO*/} break;
+            case "GetPlaylist": {/*TODO*/} break;
         }
     }
 
@@ -108,38 +101,24 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void AddPlaylist(Object ref, String token, String name) {
-
-    }
+    public void AddPlaylist(Object ref, String token, String name) { }
 
     @Override
-    public void RemoveSong(Object ref, String token, String name) {
-
-    }
+    public void RemoveSong(Object ref, String token, String name) { }
 
     @Override
-    public void RemovePlaylist(Object ref, String token, String name) {
-
-    }
+    public void RemovePlaylist(Object ref, String token, String name) { }
 
     @Override
-    public void GetSongs(Object ref, String token) {
-
-    }
+    public void GetSongs(Object ref, String token) { }
 
     @Override
-    public void GetSong(Object ref, String token, String name) {
-
-    }
+    public void GetSong(Object ref, String token, String name) { }
 
     @Override
-    public void GetPlaylists(Object ref, String token) {
-
-    }
+    public void GetPlaylists(Object ref, String token) { }
 
     @Override
-    public void GetPlaylist(Object ref, String token, String name) {
-
-    }
+    public void GetPlaylist(Object ref, String token, String name) { }
 
 }

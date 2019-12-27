@@ -94,34 +94,28 @@ public class ServerController extends Controller {
         stmt.executeUpdate(query);
     }
 
-    private boolean IsValidJSONRRequest(JSONObject jsonObject){
-        return true;
-    }
-
     //IController implementation
     @Override
     public synchronized void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonStr);
-        if (IsValidJSONRRequest(jsonObject)) {
-            JSONObject jsonContent = jsonObject.getJSONObject("Content");
-            switch (jsonObject.getString("Type")) {
-                case "Login": {
-                    Login(ref, jsonContent.getString("username"), jsonContent.getString("password"));
-                } break;
-                case "Register": {
-                    Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
-                } break;
-                case "AddSong": {
-                    AddSong(ref, jsonContent.getString("token"), jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"));
-                } break;
-                case "AddPlaylist": {/*TODO*/} break;
-                case "RemoveMusic": {/*TODO*/} break;
-                case "RemovePlaylist": {/*TODO*/} break;
-                case "GetMusics": {/*TODO*/} break;
-                case "GetMusic": {/*TODO*/} break;
-                case "GetPlaylists": {/*TODO*/} break;
-                case "GetPlaylist": {/*TODO*/} break;
-            }
+        JSONObject jsonContent = jsonObject.getJSONObject("Content");
+        switch (jsonObject.getString("Type")) {
+            case "Login": {
+                Login(ref, jsonContent.getString("username"), jsonContent.getString("password"));
+            } break;
+            case "Register": {
+                Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
+            } break;
+            case "AddSong": {
+                AddSong(ref, jsonContent.getString("token"), jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"));
+            } break;
+            case "AddPlaylist": {/*TODO*/} break;
+            case "RemoveMusic": {/*TODO*/} break;
+            case "RemovePlaylist": {/*TODO*/} break;
+            case "GetMusics": {/*TODO*/} break;
+            case "GetMusic": {/*TODO*/} break;
+            case "GetPlaylists": {/*TODO*/} break;
+            case "GetPlaylist": {/*TODO*/} break;
         }
     }
 
