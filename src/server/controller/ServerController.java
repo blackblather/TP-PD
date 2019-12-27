@@ -167,6 +167,8 @@ public class ServerController extends Controller {
     @Override
     public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year) {
         try {
+            //Validate token before file transfer begins
+            tokenizer.GetPayload(new Token(token));
             //Create server socket to accept tcp connection for file transfer
             ServerSocket fileTransferServerSocket = new ServerSocket(0);
             //Notify observers before blocking in accept(). Sends hostname and port
