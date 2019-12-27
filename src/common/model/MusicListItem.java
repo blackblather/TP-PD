@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Music {
+public class MusicListItem {
     private StringProperty name;
     public void setName(String value) { nameProperty().set(value); }
     public String getName() { return nameProperty().get(); }
@@ -30,7 +30,7 @@ public class Music {
         return year;
     }
 
-    public Music(String name, String album, Integer year) {
+    public MusicListItem(String name, String album, Integer year) {
         setName(name);
         setAlbum(album);
         setYear(year);

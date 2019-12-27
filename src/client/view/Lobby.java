@@ -3,7 +3,7 @@ package client.view;
 import client.view.modal.UploadSong;
 import common.CWT.Token;
 import common.controller.Controller;
-import common.model.Music;
+import common.model.MusicListItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -21,9 +21,9 @@ import java.util.List;
 
 public class Lobby extends View {
 
-    private List<Music> musicList = List.of();
+    private List<MusicListItem> musicList = List.of();
 
-    private ObservableList<Music> observableMusicList = FXCollections.observableArrayList(musicList);
+    private ObservableList<MusicListItem> observableMusicList = FXCollections.observableArrayList(musicList);
 
     public Lobby(Controller controller, Stage window, Token token) {
         super(controller, window, token);
@@ -66,15 +66,15 @@ public class Lobby extends View {
      *  -> Get the property;
      *  -> Register the tableView as an observer of that property;
      * ----------------------------------- // ----------------------------------- */
-    private TableView<Music> CreateTableView(){
-        TableView<Music> table = new TableView<>();
+    private TableView<MusicListItem> CreateTableView(){
+        TableView<MusicListItem> table = new TableView<>();
         table.setItems(observableMusicList);        //Sets table as observer of observableMusicList
 
-        TableColumn<Music, String> cellName = new TableColumn<>("Name");
+        TableColumn<MusicListItem, String> cellName = new TableColumn<>("Name");
         cellName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Music, String> cellAlbum = new TableColumn<>("Album");
+        TableColumn<MusicListItem, String> cellAlbum = new TableColumn<>("Album");
         cellAlbum.setCellValueFactory(new PropertyValueFactory<>("album"));
-        TableColumn<Music, String> cellYear = new TableColumn<>("Year");
+        TableColumn<MusicListItem, String> cellYear = new TableColumn<>("Year");
         cellYear.setCellValueFactory(new PropertyValueFactory<>("year"));
 
         table.getColumns().setAll(cellName, cellAlbum, cellYear);
@@ -129,7 +129,7 @@ public class Lobby extends View {
         hBox.getChildren().addAll(btnRefresh, btnAddSong);
 
         //Create Table View
-        TableView<Music> table = CreateTableView();
+        TableView<MusicListItem> table = CreateTableView();
 
         //Add children to vBox
         vBox.getChildren().addAll(hBox, table);
