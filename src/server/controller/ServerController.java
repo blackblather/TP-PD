@@ -1,10 +1,10 @@
 package server.controller;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import common.IWT.Payload;
-import common.IWT.Token;
-import common.IWT.Tokenizer;
-import common.IWT.exceptions.InvalidTokenException;
+import common.CWT.Payload;
+import common.CWT.Token;
+import common.CWT.Tokenizer;
+import common.CWT.exceptions.InvalidTokenException;
 import common.controller.Controller;
 import common.thread.FileTransferThread;
 import org.json.JSONException;

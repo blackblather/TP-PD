@@ -1,4 +1,4 @@
-package common.IWT;
+package common.CWT;
 
 public class Token {
     private String value;

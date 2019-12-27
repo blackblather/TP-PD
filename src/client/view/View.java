@@ -1,6 +1,6 @@
 package client.view;
 
-import common.IWT.Token;
+import common.CWT.Token;
 import common.controller.Controller;
 import common.observer.IObserver;
 import javafx.scene.Scene;

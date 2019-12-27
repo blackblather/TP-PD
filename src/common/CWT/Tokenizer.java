@@ -1,6 +1,6 @@
-package common.IWT;
+package common.CWT;
 
-import common.IWT.exceptions.InvalidTokenException;
+import common.CWT.exceptions.InvalidTokenException;
 import org.json.JSONException;
 import org.json.JSONObject;
 

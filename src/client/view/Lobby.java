@@ -1,7 +1,7 @@
 package client.view;
 
 import client.view.modal.UploadSong;
-import common.IWT.Token;
+import common.CWT.Token;
 import common.controller.Controller;
 import common.model.Music;
 import javafx.collections.FXCollections;

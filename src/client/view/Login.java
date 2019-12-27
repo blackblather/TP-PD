@@ -1,7 +1,7 @@
 package client.view;
 
 import client.view.modal.Register;
-import common.IWT.Token;
+import common.CWT.Token;
 import common.controller.Controller;
 import javafx.application.Platform;
 import javafx.geometry.Insets;

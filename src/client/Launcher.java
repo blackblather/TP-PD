@@ -2,7 +2,7 @@ package client;
 
 import client.controller.ClientController;
 import client.view.Login;
-import common.IWT.Token;
+import common.CWT.Token;
 import common.controller.Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;

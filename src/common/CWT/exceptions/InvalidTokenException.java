@@ -1,4 +1,4 @@
-package common.IWT.exceptions;
+package common.CWT.exceptions;
 
 public class InvalidTokenException extends Exception {
 }
