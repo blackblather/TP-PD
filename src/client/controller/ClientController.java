@@ -2,6 +2,7 @@ package client.controller;
 
 import client.thread.ReadResponseThread;
 import common.controller.Controller;
+import common.model.Music;
 import common.network.TCPService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,10 +91,10 @@ public class ClientController extends Controller {
     }
 
     @Override
-    public void AddSong(Object ref, String token, String name, String author, String album, Integer year) {
+    public void AddSong(Object ref, String token, Music music) {
         try {
             //Convert to JSONObject
-            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + name + "\", \"author\":\"" + author + "\", \"album\":\"" + album + "\", \"year\":" + year + "}}";
+            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + music.getName() + "\", \"author\":\"" + music.getAuthor() + "\", \"album\":\"" + music.getAlbum() + "\", \"year\":" + music.getYear() + ", \"filePath\":\"" + music.getFilePath() + "\"}}";
             tcpService.SendMsg(jsonStr);
         } catch (IOException e){
             Notify(NotificationType.exception);

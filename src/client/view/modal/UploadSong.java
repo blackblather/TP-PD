@@ -3,6 +3,7 @@ package client.view.modal;
 import client.view.View;
 import common.CWT.Token;
 import common.controller.Controller;
+import common.model.Music;
 import common.thread.FileTransferThread;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -100,8 +101,7 @@ public class UploadSong extends View {
         btnAddSong.setDisable(true);
 
         btnAddSong.setOnAction(event -> {
-                               //Object ref, String token, String name, String author, String album, String year
-            controller.AddSong(null, token.toString(), txtSongName.getText(), null, null, 1995);
+            controller.AddSong(null, token.toString(), new Music(txtSongName.getText(), null, null, 1995, txtFilePath.getText()));
             //new thread (timeout 10s)
         });
 

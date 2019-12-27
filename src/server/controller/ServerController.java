@@ -6,6 +6,7 @@ import common.CWT.Token;
 import common.CWT.Tokenizer;
 import common.CWT.exceptions.InvalidTokenException;
 import common.controller.Controller;
+import common.model.Music;
 import common.thread.FileTransferThread;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,7 +107,7 @@ public class ServerController extends Controller {
                 Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
             } break;
             case "AddSong": {
-                AddSong(ref, jsonContent.getString("token"), jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"));
+                AddSong(ref, jsonContent.getString("token"), new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), jsonContent.getString("filePath")));
             } break;
             case "AddPlaylist": {/*TODO*/} break;
             case "RemoveMusic": {/*TODO*/} break;
@@ -165,7 +166,7 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void AddSong(Object ref, String token, String name, String author, String album, Integer year) {
+    public synchronized void AddSong(Object ref, String token, Music music) {
         try {
             //Validate token before file transfer begins
             tokenizer.GetPayload(new Token(token));
