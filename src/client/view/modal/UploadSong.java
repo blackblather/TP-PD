@@ -101,7 +101,7 @@ public class UploadSong extends View {
         btnAddSong.setDisable(true);
 
         btnAddSong.setOnAction(event -> {
-            controller.AddSong(null, token.toString(), new Music(txtSongName.getText(), null, null, 1995, txtFilePath.getText()));
+            controller.AddSong(null, token.toString(), new Music(txtSongName.getText(), null, null, 1995, new File(txtFilePath.getText())));
             //new thread (timeout 10s)
         });
 

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import server.controller.exceptions.InvalidCredentialsException;
 
+import java.io.File;
 import java.net.ServerSocket;
 import java.security.InvalidKeyException;
 import java.sql.*;
@@ -107,7 +108,7 @@ public class ServerController extends Controller {
                 Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
             } break;
             case "AddSong": {
-                AddSong(ref, jsonContent.getString("token"), new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), jsonContent.getString("filePath")));
+                AddSong(ref, jsonContent.getString("token"), new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), new File(jsonContent.getString("filePath"))));
             } break;
             case "AddPlaylist": {/*TODO*/} break;
             case "RemoveMusic": {/*TODO*/} break;
@@ -165,6 +166,23 @@ public class ServerController extends Controller {
             Notify(ref, NotificationType.registerPasswordsNotMatching);
     }
 
+    private boolean FileNameHasValidExtension(String fileName){
+        //Checks if filename terminates with ".mp3"
+        return fileName.matches("^.+\\.mp3$");
+    }
+
+    //Generate newfileName, if "chosenFilePath" corresponds to existing file
+    private File GetFinalFile(String originalName, String destinationFolder) throws IllegalArgumentException{
+        File finalFile = new File(destinationFolder + originalName);
+
+        if(FileNameHasValidExtension(originalName)) {
+            for(int i = 1; finalFile.exists() && finalFile.isFile(); i++)
+                finalFile = new File(destinationFolder + "(" + i + ") " + originalName);
+            return finalFile;
+        } else
+            throw new IllegalArgumentException("Invalid file extension.");
+    }
+
     @Override
     public synchronized void AddSong(Object ref, String token, Music music) {
         try {
@@ -176,8 +194,15 @@ public class ServerController extends Controller {
             Notify(ref, NotificationType.readyForUpload, fileTransferServerSocket.getInetAddress().getHostName(), fileTransferServerSocket.getLocalPort());
             //Initialize "file transfer thread"
             FileTransferThread fileTransferThread = new FileTransferThread(this, ref, fileTransferServerSocket);
+            //MKDir "musicLibrary" if it doesn't exist already
+            String destinationFolder = "musicLibrary\\";
+            File destinationFolderFile = new File(destinationFolder);
+            if(!destinationFolderFile.exists())
+                destinationFolderFile.mkdir();
+            //Get final file name
+            File finalFile = GetFinalFile(music.getFile().getName(), destinationFolder);
             //Start "file transfer thread" for receiving file
-            fileTransferThread.ReceiveFile("C:\\Users\\joaom\\Desktop\\MySongLol.mp3");    //TODO
+            fileTransferThread.ReceiveFile(finalFile.getCanonicalPath());
 
             //SqlAddMusic(token, name, author, album, year);
             //Notify(ref, NotificationType.addSongSuccess);

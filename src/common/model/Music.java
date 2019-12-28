@@ -1,18 +1,20 @@
 package common.model;
 
+import java.io.File;
+
 public class Music {
     private final String name;
     private final String author;
     private final String album;
     private final Integer year;
-    private final String filePath;
+    private final File file;
 
-    public Music(String name, String author, String album, Integer year, String filePath){
+    public Music(String name, String author, String album, Integer year, File file){
         this.name = name;
         this.author = author;
         this.album = album;
         this.year = year;
-        this.filePath = filePath;
+        this.file = file;
     }
 
     public String getName() {
@@ -31,7 +33,7 @@ public class Music {
         return year;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public File getFile() {
+        return file;
     }
 }

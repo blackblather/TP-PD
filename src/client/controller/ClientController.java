@@ -94,7 +94,7 @@ public class ClientController extends Controller {
     public void AddSong(Object ref, String token, Music music) {
         try {
             //Convert to JSONObject
-            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + music.getName() + "\", \"author\":\"" + music.getAuthor() + "\", \"album\":\"" + music.getAlbum() + "\", \"year\":" + music.getYear() + ", \"filePath\":\"" + music.getFilePath() + "\"}}";
+            String jsonStr = "{\"Type\":\"AddSong\",\"Content\":{\"token\":\"" + token + "\", \"name\":\"" + music.getName() + "\", \"author\":\"" + music.getAuthor() + "\", \"album\":\"" + music.getAlbum() + "\", \"year\":" + music.getYear() + ", \"filePath\":\"" + music.getFile().getCanonicalPath().replace("\\", "\\\\") + "\"}}";
             tcpService.SendMsg(jsonStr);
         } catch (IOException e){
             Notify(NotificationType.exception);
