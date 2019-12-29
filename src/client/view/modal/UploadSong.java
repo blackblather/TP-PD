@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -130,9 +131,16 @@ public class UploadSong extends View {
 
     @Override
     public void OnAddSongSuccess(Object ref) {
-        Platform.runLater(
-            () -> DisplayErrorAlert("GREAT SUCCESS","YE BOYE")
-        );
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Upload complete");
+            alert.setContentText("Song uploaded with success");
+
+            alert.showAndWait();
+
+            Close();
+        });
     }
 
     @Override
