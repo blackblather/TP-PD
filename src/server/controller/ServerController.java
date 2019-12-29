@@ -246,4 +246,9 @@ public class ServerController extends Controller {
 
     }
 
+    @Override
+    public void ThrowException(Object ref, Exception e) {
+        Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
+    }
+
 }

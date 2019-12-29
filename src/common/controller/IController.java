@@ -18,4 +18,6 @@ public interface IController {
     void GetSong(Object ref, String token, String name);
     void GetPlaylists(Object ref, String token);
     void GetPlaylist(Object ref, String token,  String name);
+    //Exception
+    void ThrowException(Object ref, Exception e);
 }
