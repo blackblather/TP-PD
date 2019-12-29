@@ -1,6 +1,9 @@
 package common.thread;
 
-import common.observable.Observable;
+import common.CWT.Payload;
+import common.controller.Controller;
+import common.model.Music;
+import server.controller.ServerController;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -13,46 +16,71 @@ import java.net.SocketTimeoutException;
  * NOT built for general use purpose
  */
 public class FileTransferThread {
-    //Control vars
+    private enum RequestType{
+        serverRequest,
+        clientRequest
+    }
+    private final RequestType requestType;
+    //File control vars
     private final int byteArrayChunkSize = 4096;    //4Mb
     private final int timeout = 10*1000;            //10s
     private final byte[] chunk = new byte[byteArrayChunkSize];
+    //Socket control vars
     private Socket fileTransferSocket;
     private final ServerSocket fileTransferServerSocket;
     private final String hostname;
     private final Integer port;
+    //Thread control vars
     private Thread fileTransferThread;
-    //Notification vars
-    private final Observable observable;
+    //Model control vars
+    private final Music music;
+    //Notification control vars
+    private final Controller controller;
+    private final Payload payload;
     private final Object ref;
 
-    public FileTransferThread(Observable observable, Object ref, ServerSocket fileTransferServerSocket) throws IOException {
-        this.observable = observable;
+    public FileTransferThread(Controller controller, Object ref, Payload payload, Music music, ServerSocket fileTransferServerSocket) throws IllegalArgumentException {
+        if(controller == null || ref == null || payload == null || music == null || fileTransferServerSocket == null)
+            throw new IllegalArgumentException("Arguments must not be null.");
+
+        this.requestType = RequestType.serverRequest;
+
+        this.controller = controller;
+        this.payload = payload;
         this.ref = ref;
+        this.music = music;
         this.fileTransferServerSocket = fileTransferServerSocket;
         this.hostname = null;
         this.port = null;
     }
 
-    public FileTransferThread(Observable observable, String hostname, Integer port) {
-        this.observable = observable;
+    public FileTransferThread(Controller controller, String hostname, Integer port) throws IllegalArgumentException {
+        if(controller == null || hostname == null || port == null)
+            throw new IllegalArgumentException("Arguments must not be null.");
+
+        this.requestType = RequestType.clientRequest;
+
+        this.controller = controller;
+        this.payload = null;
         this.ref = null;
+        this.music = null;
         this.fileTransferServerSocket = null;
         this.hostname = hostname;
         this.port = port;
     }
 
+    //Initializes tcp socket differently, depending on who's using this class, client or server
     private void InitSocket() throws IOException {
         try{
-            if(fileTransferServerSocket == null && hostname != null && port != null){
+            if(requestType == RequestType.clientRequest){ //Client
                 fileTransferSocket = new Socket();
                 fileTransferSocket.connect(new InetSocketAddress(hostname, port), timeout);
-            } else {
+            } else {    //Server
                 fileTransferServerSocket.setSoTimeout(timeout);
                 fileTransferSocket = fileTransferServerSocket.accept();
             }
         } catch (SocketTimeoutException e){
-            observable.Notify(ref, Observable.NotificationType.exception, e.getClass().getSimpleName());
+            controller.ThrowException(ref, e);
         }
     }
 
@@ -75,6 +103,7 @@ public class FileTransferThread {
                 //Close handles
                 outputStream.close();
                 fileInputStream.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -101,6 +130,9 @@ public class FileTransferThread {
                 //Close handles
                 inputStream.close();
                 fileOutputStream.close();
+
+                if(controller instanceof ServerController)
+                    ((ServerController)controller).AddSong(ref, payload, music);
             } catch (IOException e) {
                 e.printStackTrace();
             }

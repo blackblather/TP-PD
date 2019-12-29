@@ -4,7 +4,6 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import common.CWT.Payload;
 import common.CWT.Token;
 import common.CWT.Tokenizer;
-import common.CWT.exceptions.InvalidTokenException;
 import common.controller.Controller;
 import common.model.Music;
 import common.thread.FileTransferThread;
@@ -13,6 +12,7 @@ import org.json.JSONObject;
 import server.controller.exceptions.InvalidCredentialsException;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.security.InvalidKeyException;
 import java.sql.*;
@@ -87,10 +87,8 @@ public class ServerController extends Controller {
         return tokenizer.GetToken(new Payload(username));
     }
 
-    private void SqlAddMusic(String tokenStr, String name, String author, String album, Integer year) throws SQLException, InvalidTokenException {
-        Payload payload = tokenizer.GetPayload(new Token(tokenStr));
-        String path = "SOME RANDOM FILE NAME";  //TODO
-        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano) VALUES ((SELECT id_users FROM users WHERE username = \"" + payload.GetUsername() + "\"),1,\"" + name + "\", \"" + author + "\", \"" + album + "\", " + year + ", \"" + path + "\")";
+    private void SqlAddMusic(Payload payload, Music music) throws SQLException, IOException {
+        String query = "INSERT INTO musicas (id_users, id_generos, nome, autor, album, ano, path) VALUES ((SELECT id_users FROM users WHERE username = \"" + payload.GetUsername() + "\"),1,\"" + music.getName() + "\", \"" + music.getAuthor() + "\", \"" + music.getAlbum() + "\", " + music.getYear() + ", \"" + music.getFile().getCanonicalPath().replace("\\", "\\\\") + "\")";
         stmt = conn.createStatement();
         stmt.executeUpdate(query);
     }
@@ -101,15 +99,9 @@ public class ServerController extends Controller {
         JSONObject jsonObject = new JSONObject(jsonStr);
         JSONObject jsonContent = jsonObject.getJSONObject("Content");
         switch (jsonObject.getString("Type")) {
-            case "Login": {
-                Login(ref, jsonContent.getString("username"), jsonContent.getString("password"));
-            } break;
-            case "Register": {
-                Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf"));
-            } break;
-            case "AddSong": {
-                AddSong(ref, jsonContent.getString("token"), new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), new File(jsonContent.getString("filePath"))));
-            } break;
+            case "Login": Login(ref, jsonContent.getString("username"), jsonContent.getString("password")); break;
+            case "Register": Register(ref, jsonContent.getString("username"), jsonContent.getString("password"), jsonContent.getString("passwordConf")); break;
+            case "UploadSongRequest": UploadSongRequest(ref, jsonContent.getString("token"), new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year"), new File(jsonContent.getString("filePath")))); break;
             case "AddPlaylist": {/*TODO*/} break;
             case "RemoveMusic": {/*TODO*/} break;
             case "RemovePlaylist": {/*TODO*/} break;
@@ -129,13 +121,13 @@ public class ServerController extends Controller {
         } catch (InvalidCredentialsException e){
             Notify(ref, NotificationType.loginInvalidCredentials);
         } catch (Exception e) {
-            Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
+            ThrowException(ref, e);
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
-                    Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
+                    ThrowException(ref, e);
                 }
             }
         }
@@ -152,13 +144,13 @@ public class ServerController extends Controller {
                 //No contexto desta função, a unica constraint violation possivel, é quando se tenta inserir usernames identicos
                 Notify(ref, NotificationType.registerUsernameNotUnique);
             } catch (Exception e) {
-                Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
+                ThrowException(ref, e);
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
                     } catch (SQLException e) {
-                        Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
+                        ThrowException(ref, e);
                     }
                 }
             }
@@ -166,16 +158,13 @@ public class ServerController extends Controller {
             Notify(ref, NotificationType.registerPasswordsNotMatching);
     }
 
-    private boolean FileNameHasValidExtension(String fileName){
-        //Checks if filename terminates with ".mp3"
-        return fileName.matches("^.+\\.mp3$");
-    }
-
     //Generate newfileName, if "chosenFilePath" corresponds to existing file
     private File GetFinalFile(String originalName, String destinationFolder) throws IllegalArgumentException{
         File finalFile = new File(destinationFolder + originalName);
 
-        if(FileNameHasValidExtension(originalName)) {
+        //Validate file extension
+        if(originalName.matches("^.+\\.mp3$")) {
+            //Iterate over files with the same name, until a unique name is found
             for(int i = 1; finalFile.exists() && finalFile.isFile(); i++)
                 finalFile = new File(destinationFolder + "(" + i + ") " + originalName);
             return finalFile;
@@ -184,30 +173,42 @@ public class ServerController extends Controller {
     }
 
     @Override
-    public synchronized void AddSong(Object ref, String token, Music music) {
+    public void UploadSongRequest(Object ref, String token, Music music) {
         try {
             //Validate token before file transfer begins
-            tokenizer.GetPayload(new Token(token));
+            Payload payload = tokenizer.GetPayload(new Token(token));
+            //Create folder "musicLibrary" if it doesn't exist already
+            String destinationFolder = "musicLibrary\\";
+            File destinationFolderFile = new File(destinationFolder);
+            if(!destinationFolderFile.exists()) {
+                destinationFolderFile.mkdir();
+            }
+            //Update model file info (old file = client file info; new file = server file info)
+            music.setFile(GetFinalFile(music.getFile().getName(), destinationFolder));
             //Create server socket to accept tcp connection for file transfer
             ServerSocket fileTransferServerSocket = new ServerSocket(0);
             //Notify observers before blocking in accept(). Sends hostname and port
             Notify(ref, NotificationType.readyForUpload, fileTransferServerSocket.getInetAddress().getHostName(), fileTransferServerSocket.getLocalPort());
             //Initialize "file transfer thread"
-            FileTransferThread fileTransferThread = new FileTransferThread(this, ref, fileTransferServerSocket);
-            //MKDir "musicLibrary" if it doesn't exist already
-            String destinationFolder = "musicLibrary\\";
-            File destinationFolderFile = new File(destinationFolder);
-            if(!destinationFolderFile.exists())
-                destinationFolderFile.mkdir();
-            //Get final file name
-            File finalFile = GetFinalFile(music.getFile().getName(), destinationFolder);
+            FileTransferThread fileTransferThread = new FileTransferThread(this, ref, payload, music, fileTransferServerSocket);
             //Start "file transfer thread" for receiving file
-            fileTransferThread.ReceiveFile(finalFile.getCanonicalPath());
-
-            //SqlAddMusic(token, name, author, album, year);
-            //Notify(ref, NotificationType.addSongSuccess);
+            fileTransferThread.ReceiveFile(music.getFile().getCanonicalPath());
         } catch (Exception e) {
-            Notify(ref, NotificationType.exception, e.getClass().getSimpleName());
+            ThrowException(ref, e);
+        }
+    }
+
+    @Override
+    public void DownloadSong(Object ref, String token, Music music) { }
+
+    //Called after file transfer is complete
+    public synchronized void AddSong(Object ref, Payload payload, Music music) {
+        try {
+            //Token was previously validated, and payload extracted
+            SqlAddMusic(payload, music);
+            Notify(ref, NotificationType.addSongSuccess);
+        } catch (Exception e) {
+            ThrowException(ref, e);
         }
     }
 

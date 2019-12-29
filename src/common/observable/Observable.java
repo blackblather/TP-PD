@@ -75,15 +75,11 @@ public abstract class Observable {
         }
     }
 
-    protected void Notify(Object ref, NotificationType type){
-        Notify(ref, type);
-    }
-
     protected void Notify(NotificationType type, Object... param){
         Notify(null, type, param);
     }
 
     protected void Notify(NotificationType type){
-        Notify(null, type);
+        Notify((Object) null, type);
     }
 }

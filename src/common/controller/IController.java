@@ -7,8 +7,11 @@ public interface IController {
     void RouteJSONStr(Object ref, String jsonStr) throws JSONException;
     void Login(Object ref, String username, String password);
     void Register(Object ref, String username, String password, String passwordConf);
+    //FILE TRANSFER OPERATIONS
+    void UploadSongRequest(Object ref, String token, Music music);
+    void DownloadSong(Object ref, String token, Music music);
     //INSERT OPERATIONS
-    void AddSong(Object ref, String token, Music music);
+    //void AddSong(Object ref, String token, Music music);
     void AddPlaylist(Object ref, String token, String name);
     //DELETE OPERATIONS
     void RemoveSong(Object ref, String token, String name);

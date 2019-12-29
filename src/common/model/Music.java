@@ -7,7 +7,7 @@ public class Music {
     private final String author;
     private final String album;
     private final Integer year;
-    private final File file;
+    private File file;
 
     public Music(String name, String author, String album, Integer year, File file){
         this.name = name;
@@ -35,5 +35,9 @@ public class Music {
 
     public File getFile() {
         return file;
+    }
+
+    public void setFile(File file){
+        this.file = file;
     }
 }
