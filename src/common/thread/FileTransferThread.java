@@ -72,10 +72,10 @@ public class FileTransferThread {
     //Initializes tcp socket differently, depending on who's using this class, client or server
     private void InitSocket() throws IOException {
         try{
-            if(requestType == RequestType.clientRequest){ //Client
+            if(requestType == RequestType.clientRequest){                                   //Client
                 fileTransferSocket = new Socket();
                 fileTransferSocket.connect(new InetSocketAddress(hostname, port), timeout);
-            } else {    //Server
+            } else {                                                                        //Server
                 fileTransferServerSocket.setSoTimeout(timeout);
                 fileTransferSocket = fileTransferServerSocket.accept();
             }

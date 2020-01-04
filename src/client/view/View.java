@@ -2,6 +2,7 @@ package client.view;
 
 import common.CWT.Token;
 import common.controller.Controller;
+import common.model.Music;
 import common.observer.IObserver;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -79,7 +80,7 @@ public abstract class View implements IObserver {
     public void OnUsernameNotUnique(Object ref) { }
 
     @Override
-    public void OnAddSongSuccess(Object ref) { }
+    public void OnAddSongSuccess(Object ref, Music music) { }
 
     @Override
     public void OnReadyForUpload(Object ref, String hostname, Integer port) { }

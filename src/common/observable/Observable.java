@@ -1,5 +1,6 @@
 package common.observable;
 
+import common.model.Music;
 import common.observer.IObserver;
 
 import java.util.ArrayList;
@@ -39,7 +40,6 @@ public abstract class Observable {
                     case loginInvalidCredentials: obs.OnInvalidCredentials(ref); break;
                     case registerPasswordsNotMatching: obs.OnPasswordsNotMatching(ref); break;
                     case registerUsernameNotUnique: obs.OnUsernameNotUnique(ref); break;
-                    case addSongSuccess: obs.OnAddSongSuccess(ref); break;
                 }
             } else {
                 switch (type){
@@ -64,6 +64,11 @@ public abstract class Observable {
                         //params[1] -> (Integer) port
                         if (params.length == 2 && params[0] instanceof String && params[1] instanceof Integer)
                             obs.OnReadyForDownload(ref, (String) params[0], (Integer) params[1]);
+                    } break;
+                    case addSongSuccess:{
+                        //params[0] -> (Music) music
+                        if(params.length == 1 && params[0] instanceof Music)
+                            obs.OnAddSongSuccess(ref, (Music) params[0]);
                     } break;
                     case exception:{
                         //params[0] -> (String) exception simple name

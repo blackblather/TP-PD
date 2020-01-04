@@ -3,7 +3,9 @@ package client.view;
 import client.view.modal.UploadSong;
 import common.CWT.Token;
 import common.controller.Controller;
+import common.model.Music;
 import common.model.MusicListItem;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -140,4 +142,10 @@ public class Lobby extends View {
         return scene;
     }
 
+    @Override
+    public void OnAddSongSuccess(Object ref, Music music) {
+        Platform.runLater(()->{
+            observableMusicList.add(new MusicListItem(music.getName(), music.getAlbum(), music.getYear()));
+        });
+    }
 }

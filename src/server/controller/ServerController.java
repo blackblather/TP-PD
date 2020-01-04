@@ -180,9 +180,8 @@ public class ServerController extends Controller {
             //Create folder "musicLibrary" if it doesn't exist already
             String destinationFolder = "musicLibrary\\";
             File destinationFolderFile = new File(destinationFolder);
-            if(!destinationFolderFile.exists()) {
+            if(!destinationFolderFile.exists())
                 destinationFolderFile.mkdir();
-            }
             //Update model file info (old file = client file info; new file = server file info)
             music.setFile(GetFinalFile(music.getFile().getName(), destinationFolder));
             //Create server socket to accept tcp connection for file transfer
@@ -206,7 +205,7 @@ public class ServerController extends Controller {
         try {
             //Token was previously validated, and payload extracted
             SqlAddMusic(payload, music);
-            Notify(ref, NotificationType.addSongSuccess);
+            Notify(ref, NotificationType.addSongSuccess, music);
         } catch (Exception e) {
             ThrowException(ref, e);
         }

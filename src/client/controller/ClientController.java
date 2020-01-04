@@ -49,8 +49,10 @@ public class ClientController extends Controller {
 
             } break;
             case "AddSong": {
-                if(jsonObject.getBoolean("Success"))
-                    Notify(NotificationType.addSongSuccess);
+                if(jsonObject.getBoolean("Success")) {
+                    JSONObject jsonContent = jsonObject.getJSONObject("Content");
+                    Notify(NotificationType.addSongSuccess, new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year")));
+                }
             } break;
             case "ReadyForUpload":{
                 Notify(NotificationType.readyForUpload, jsonObject.getString("hostname"), jsonObject.getInt("port"));

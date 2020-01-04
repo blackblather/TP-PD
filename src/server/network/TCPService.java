@@ -1,6 +1,7 @@
 package server.network;
 
 import common.controller.Controller;
+import common.model.Music;
 import common.observer.IObserver;
 
 import java.io.IOException;
@@ -79,10 +80,10 @@ public class TCPService extends common.network.TCPService implements IObserver {
     }
 
     @Override
-    public void OnAddSongSuccess(Object ref) {
+    public void OnAddSongSuccess(Object ref, Music music) {
         if (ref == this) {
             try {
-                SendMsg("{\"Type\":\"AddSong\", \"Success\":true}");
+                SendMsg("{\"Type\":\"AddSong\", \"Success\":true, \"Content\":{\"name\":\"" + music.getName() + "\", \"author\":\"" + music.getAuthor() + "\", \"album\":\"" + music.getAlbum() + "\", \"year\":" + music.getYear() + "}}");
             } catch (IOException e) {
                 e.printStackTrace();
             }

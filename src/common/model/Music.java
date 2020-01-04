@@ -17,6 +17,14 @@ public class Music {
         this.file = file;
     }
 
+    public Music(String name, String author, String album, Integer year){
+        this.name = name;
+        this.author = author;
+        this.album = album;
+        this.year = year;
+        this.file = null;
+    }
+
     public String getName() {
         return name;
     }

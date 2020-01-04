@@ -160,7 +160,7 @@ public class UploadSong extends View {
     }
 
     @Override
-    public void OnAddSongSuccess(Object ref) {
+    public void OnAddSongSuccess(Object ref, Music music) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
