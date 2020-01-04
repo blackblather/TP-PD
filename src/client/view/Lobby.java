@@ -63,8 +63,8 @@ public class Lobby extends View {
      * ----------------------------------- // -----------------------------------
      * cellValueFactory -> Used to populate individual cells in the column
      * ----------------------------------- // -----------------------------------
-     * new PropertyValueFactory<Music, String>("name") -> Used to:
-     *  -> Invoke nameProperty() in Music class;
+     * new PropertyValueFactory<MusicListItem, String>("name") -> Used to:
+     *  -> Invoke nameProperty() in MusicListItem class;
      *  -> Get the property;
      *  -> Register the tableView as an observer of that property;
      * ----------------------------------- // ----------------------------------- */
@@ -74,12 +74,18 @@ public class Lobby extends View {
 
         TableColumn<MusicListItem, String> cellName = new TableColumn<>("Name");
         cellName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        cellName.setPrefWidth(458);
+
+        TableColumn<MusicListItem, String> cellAuthor = new TableColumn<>("Author");
+        cellAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
+
         TableColumn<MusicListItem, String> cellAlbum = new TableColumn<>("Album");
         cellAlbum.setCellValueFactory(new PropertyValueFactory<>("album"));
+
         TableColumn<MusicListItem, String> cellYear = new TableColumn<>("Year");
         cellYear.setCellValueFactory(new PropertyValueFactory<>("year"));
 
-        table.getColumns().setAll(cellName, cellAlbum, cellYear);
+        table.getColumns().setAll(cellName, cellAuthor, cellAlbum, cellYear);
 
         return table;
     }
@@ -145,7 +151,7 @@ public class Lobby extends View {
     @Override
     public void OnAddSongSuccess(Object ref, Music music) {
         Platform.runLater(()->{
-            observableMusicList.add(new MusicListItem(music.getName(), music.getAlbum(), music.getYear()));
+            observableMusicList.add(new MusicListItem(music.getName(), music.getAuthor(), music.getAlbum(), music.getYear()));
         });
     }
 }
