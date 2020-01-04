@@ -51,6 +51,7 @@ public abstract class View implements IObserver {
 
     protected void Close(){
         window.close();
+        controller.RemoveObserver(this);
     }
 
     private void SetScene(Scene scene){
