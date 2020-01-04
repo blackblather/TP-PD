@@ -131,7 +131,7 @@ public class FileTransferThread {
                 inputStream.close();
                 fileOutputStream.close();
 
-                if(controller instanceof ServerController)
+                if(requestType == RequestType.serverRequest)
                     ((ServerController)controller).AddSong(ref, payload, music);
             } catch (IOException e) {
                 e.printStackTrace();
