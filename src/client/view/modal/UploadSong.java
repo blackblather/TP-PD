@@ -9,10 +9,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,8 +19,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class UploadSong extends View {
+    private TextField txtSongName;
+    private TextField txtAuthor;
+    private TextField txtAlbum;
     private TextField txtFilePath;
 
     public UploadSong(Controller controller, Stage window, Token token) {
@@ -33,8 +34,11 @@ public class UploadSong extends View {
         window.setResizable(false);
     }
 
-    private void ModifyBtnVisibility(Button btnAddSong, TextField txtSongName, TextField txtFilePath){
-        if(txtSongName.getText().length() > 0 & txtFilePath.getText().length() > 0)
+    private void ModifyBtnVisibility(Button btnAddSong){
+        if(txtSongName.getText().length() > 0 &&
+           txtAuthor.getText().length() > 0 &&
+           txtAlbum.getText().length() > 0 &&
+           txtFilePath.getText().length() > 0)
             btnAddSong.setDisable(false);
         else
             btnAddSong.setDisable(true);
@@ -46,7 +50,7 @@ public class UploadSong extends View {
         FlowPane root = new FlowPane();
 
         //Create scene
-        Scene scene = new Scene(root, 270, 400);
+        Scene scene = new Scene(root, 270, 355);
         scene.setFill(Color.WHITE);
 
         //Create root elements
@@ -65,17 +69,37 @@ public class UploadSong extends View {
         Label lblSongName = new Label("Song name:");
 
         //Textbox - Song Name
-        TextField txtSongName = new TextField();
+        txtSongName = new TextField();
+
+        //Label - Author
+        Label lblAuthor = new Label("Author:");
+
+        //Textbox - Author
+        txtAuthor = new TextField();
+
+        //Label - Album
+        Label lblAlbum = new Label("Album:");
+
+        //Textbox - Album
+        txtAlbum = new TextField();
+
+        //Label - Year
+        Label lblYear = new Label("Year:");
+
+        //Textbox - Year
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        Spinner<Integer> spinnerYear = new Spinner<>(1, currentYear, currentYear, 1);
+        spinnerYear.setPrefWidth(scene.getWidth());
 
         //Label - File Path
         Label lblFilePath = new Label("File path:");
 
+        //Textbox - File Path
+        txtFilePath = new TextField();
+
         //Create HBox to host txtFilePath and btnFindFile side-by-side
         HBox hBoxTxtBtn = new HBox(10);
         hBoxTxtBtn.setPrefWidth(scene.getWidth());
-
-        //Textbox - File Path
-        txtFilePath = new TextField();
 
         //Button - Find File
         Button btnFindFile = new Button("Open");
@@ -85,7 +109,7 @@ public class UploadSong extends View {
         btnFindFile.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select to open");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Audio Files", "*.mp3"));
             File selectedFile = fileChooser.showOpenDialog(window);
             if (selectedFile != null)
                 txtFilePath.setText(selectedFile.getAbsolutePath());
@@ -102,16 +126,16 @@ public class UploadSong extends View {
         btnAddSong.setDisable(true);
 
         btnAddSong.setOnAction(event -> {
-            controller.UploadSongRequest(null, token.toString(), new Music(txtSongName.getText(), null, null, 1995, new File(txtFilePath.getText())));
+            controller.UploadSongRequest(null, token.toString(), new Music(txtSongName.getText(), txtAuthor.getText(), txtAlbum.getText(), spinnerYear.getValue(), new File(txtFilePath.getText())));
             //new thread (timeout 10s)
         });
 
         //Textbox listeners
         txtSongName.textProperty().addListener((observable, oldValue, newValue) -> {
-            ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath);
+            ModifyBtnVisibility(btnAddSong);
         });
         txtFilePath.textProperty().addListener((observable, oldValue, newValue) -> {
-            ModifyBtnVisibility(btnAddSong, txtSongName, txtFilePath);
+            ModifyBtnVisibility(btnAddSong);
         });
 
         //Add children to hBox
@@ -120,6 +144,12 @@ public class UploadSong extends View {
         //Add children to vBox
         vBox.getChildren().addAll(lblSongName,
                 txtSongName,
+                lblAuthor,
+                txtAuthor,
+                lblAlbum,
+                txtAlbum,
+                lblYear,
+                spinnerYear,
                 lblFilePath,
                 hBoxTxtBtn,
                 hBox);
