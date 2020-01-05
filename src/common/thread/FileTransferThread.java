@@ -40,7 +40,7 @@ public class FileTransferThread {
     private final Object ref;
 
     public FileTransferThread(Controller controller, Object ref, Payload payload, Music music, ServerSocket fileTransferServerSocket) throws IllegalArgumentException {
-        if(controller == null || ref == null || payload == null || music == null || fileTransferServerSocket == null)
+        if(controller == null || payload == null || music == null || fileTransferServerSocket == null)
             throw new IllegalArgumentException("Arguments must not be null.");
 
         this.requestType = RequestType.serverRequest;
