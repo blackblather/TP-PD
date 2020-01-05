@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import common.CWT.Payload;
 import common.CWT.Token;
 import common.CWT.Tokenizer;
+import common.CWT.exceptions.InvalidTokenException;
 import common.controller.Controller;
 import common.model.Music;
 import common.thread.FileTransferThread;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.security.InvalidKeyException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
     -> SQLInjection
@@ -93,6 +96,19 @@ public class ServerController extends Controller {
         stmt.executeUpdate(query);
     }
 
+    private List<Music> SqlGetSongs() throws SQLException {
+        ArrayList<Music> musics = new ArrayList<>();
+
+        String query = "SELECT * from musicas";
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+
+        while (rs.next())
+            musics.add(new Music(rs.getString("nome"), rs.getString("autor"), rs.getString("album"), rs.getInt("ano")));
+
+        return musics;
+    }
+
     //IController implementation
     @Override
     public synchronized void RouteJSONStr(Object ref, String jsonStr) throws JSONException {
@@ -105,8 +121,10 @@ public class ServerController extends Controller {
             case "AddPlaylist": {/*TODO*/} break;
             case "RemoveMusic": {/*TODO*/} break;
             case "RemovePlaylist": {/*TODO*/} break;
-            case "GetMusics": {/*TODO*/} break;
-            case "GetMusic": {/*TODO*/} break;
+            case "GetSongs": {
+                GetSongs(ref, jsonContent.getString("token"));
+            } break;
+            case "GetSong": {/*TODO*/} break;
             case "GetPlaylists": {/*TODO*/} break;
             case "GetPlaylist": {/*TODO*/} break;
         }
@@ -228,7 +246,14 @@ public class ServerController extends Controller {
 
     @Override
     public synchronized void GetSongs(Object ref, String token) {
-
+        try {
+            //Validate token
+            tokenizer.GetPayload(new Token(token));
+            List<Music> musics = SqlGetSongs();
+            Notify(ref, NotificationType.getSongsSuccess, musics);
+        } catch (InvalidTokenException | SQLException e) {
+            ThrowException(ref, e);
+        }
     }
 
     @Override

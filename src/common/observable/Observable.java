@@ -16,6 +16,7 @@ public abstract class Observable {
         addSongSuccess,
         readyForUpload,
         readyForDownload,
+        getSongsSuccess,
         exception
     }
 
@@ -45,12 +46,12 @@ public abstract class Observable {
                 switch (type){
                     case loginSuccess:{
                         //params[0] -> (String) token
-                        if(params.length == 1 & params[0] instanceof String)
+                        if(params.length == 1 && params[0] instanceof String)
                             obs.OnLoginSuccess(ref, (String) params[0]);
                     } break;
                     case registerSuccess:{
                         //params[0] -> (String) token
-                        if(params.length == 1 & params[0] instanceof String)
+                        if(params.length == 1 && params[0] instanceof String)
                             obs.OnRegisterSuccess(ref, (String) params[0]);
                     } break;
                     case readyForUpload:{
@@ -72,8 +73,12 @@ public abstract class Observable {
                     } break;
                     case exception:{
                         //params[0] -> (String) exception simple name
-                        if(params.length == 1 & params[0] instanceof String)
+                        if(params.length == 1 && params[0] instanceof String)
                             obs.OnExceptionOccurred(ref, (String) params[0]);
+                    } break;
+                    case getSongsSuccess:{
+                        if (params.length == 1 && params[0] instanceof ArrayList)
+                            obs.OnGetSongsSuccess(ref, (ArrayList) params[0]);
                     } break;
                 }
             }

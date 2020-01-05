@@ -6,6 +6,7 @@ import common.observer.IObserver;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public class TCPService extends common.network.TCPService implements IObserver {
     public TCPService(Socket socket, Controller controller) throws IllegalArgumentException, IOException {
@@ -104,6 +105,25 @@ public class TCPService extends common.network.TCPService implements IObserver {
     @Override
     public void OnReadyForDownload(Object ref, String hostname, Integer port) {
 
+    }
+
+    @Override
+    public void OnGetSongsSuccess(Object ref, List<Music> musics) {
+        if(ref == this && musics.size() > 0){
+            try {
+                StringBuilder JSONString = new StringBuilder("{\"Type\":\"GetSongs\", \"Success\":true, \"Songs\":[");
+                for(int i = 0; i < musics.size(); i++){
+                    Music music = musics.get(i);
+                    JSONString.append("{\"name\":\"").append(music.getName()).append("\", \"author\":\"").append(music.getAuthor()).append("\", \"album\":\"").append(music.getAlbum()).append("\", \"year\":").append(music.getYear()).append("}");
+                    if(i < (musics.size() - 1))
+                        JSONString.append(",");
+                }
+                JSONString.append("]}");
+                SendMsg(JSONString.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

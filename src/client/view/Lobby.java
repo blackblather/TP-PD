@@ -114,23 +114,18 @@ public class Lobby extends View {
         //Align hBox's content
         hBox.setAlignment(Pos.CENTER_RIGHT);
 
-        //Button - Add Song
+        //Button - Refresh
         Button btnRefresh = new Button("Refresh");
-
-        /*TODO*//*TODO*//*TODO*/
         btnRefresh.setOnAction(actionEvent -> {
-//            observableMusicList.add(new Music("YEEE","CYKA",2020));
+            controller.GetSongs(null, token.toString());
         });
 
         //Button - Add Song
         Button btnAddSong = new Button("Add Song");
-
         btnAddSong.setOnAction(actionEvent -> {
             UploadSong uploadSong = new UploadSong(controller, new Stage(), this.token);
             uploadSong.SetOwner(window);
             uploadSong.Show();
-//            if(observableMusicList.size() > 0)
-//                observableMusicList.remove(observableMusicList.size()-1);
         });
 
         //Add btnAddSong to hBox
@@ -145,6 +140,9 @@ public class Lobby extends View {
         //Add children to flowpane
         root.getChildren().addAll(mainMenu,vBox);
 
+        //Requests for the list of songs
+        controller.GetSongs(null, token.toString());
+
         return scene;
     }
 
@@ -152,6 +150,18 @@ public class Lobby extends View {
     public void OnAddSongSuccess(Object ref, Music music) {
         Platform.runLater(()->{
             observableMusicList.add(new MusicListItem(music.getName(), music.getAuthor(), music.getAlbum(), music.getYear()));
+        });
+    }
+
+    @Override
+    public void OnGetSongsSuccess(Object ref, List<Music> musics) {
+        //Warning: NOT OPTIMIZED!!!
+        Platform.runLater(()-> {
+            //Clear list
+            observableMusicList.clear();
+            //Adds new songs
+            for(Music music : musics)
+                observableMusicList.add(new MusicListItem(music.getName(), music.getAuthor(), music.getAlbum(), music.getYear()));
         });
     }
 }

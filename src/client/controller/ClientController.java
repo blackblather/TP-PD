@@ -4,11 +4,14 @@ import client.thread.ReadResponseThread;
 import common.controller.Controller;
 import common.model.Music;
 import common.network.TCPService;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /*NOTA: A implementação desta aplicação não tem em consideração questões de segurança, tais como:
     -> SQLInjection
@@ -51,7 +54,10 @@ public class ClientController extends Controller {
             case "AddSong": {
                 if(jsonObject.getBoolean("Success")) {
                     JSONObject jsonContent = jsonObject.getJSONObject("Content");
-                    Notify(NotificationType.addSongSuccess, new Music(jsonContent.getString("name"), jsonContent.getString("author"), jsonContent.getString("album"), jsonContent.getInt("year")));
+                    Notify(NotificationType.addSongSuccess, new Music(jsonContent.getString("name"),
+                                                                      jsonContent.getString("author"),
+                                                                      jsonContent.getString("album"),
+                                                                      jsonContent.getInt("year")));
                 }
             } break;
             case "ReadyForUpload":{
@@ -60,8 +66,23 @@ public class ClientController extends Controller {
             case "AddPlaylist": {/*TODO*/} break;
             case "RemoveMusic": {/*TODO*/} break;
             case "RemovePlaylist": {/*TODO*/} break;
-            case "GetMusics": {/*TODO*/} break;
-            case "GetMusic": {/*TODO*/} break;
+            case "GetSongs": {
+                if(jsonObject.getBoolean("Success")) {
+                    List<Music> musics = new ArrayList<>();
+                    JSONArray JSONSongsArray = jsonObject.getJSONArray("Songs");
+
+                    for (int i = 0; i < JSONSongsArray.length(); i++) {
+                        JSONObject jsonSong = JSONSongsArray.getJSONObject(i);
+                        musics.add(new Music(jsonSong.getString("name"),
+                                             jsonSong.getString("author"),
+                                             jsonSong.getString("album"),
+                                             jsonSong.getInt("year")));
+                    }
+
+                    Notify(NotificationType.getSongsSuccess, musics);
+                }
+            } break;
+            case "GetSong": {/*TODO*/} break;
             case "GetPlaylists": {/*TODO*/} break;
             case "GetPlaylist": {/*TODO*/} break;
         }
@@ -106,9 +127,6 @@ public class ClientController extends Controller {
     @Override
     public void DownloadSong(Object ref, String token, Music music) { }
 
-    /*@Override
-    public void AddSong(Object ref, String token, Music music) { *//*EMPTY BODY*//* }*/
-
     @Override
     public void AddPlaylist(Object ref, String token, String name) { }
 
@@ -119,7 +137,15 @@ public class ClientController extends Controller {
     public void RemovePlaylist(Object ref, String token, String name) { }
 
     @Override
-    public void GetSongs(Object ref, String token) { }
+    public void GetSongs(Object ref, String token) {
+        try {
+            //Convert to JSONObject
+            String jsonStr = "{\"Type\":\"GetSongs\", \"Content\":{\"token\":\"" + token + "\"}}";
+            tcpService.SendMsg(jsonStr);
+        } catch (IOException e){
+            Notify(NotificationType.exception);
+        }
+    }
 
     @Override
     public void GetSong(Object ref, String token, String name) { }

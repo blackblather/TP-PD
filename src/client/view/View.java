@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import java.util.List;
+
 public abstract class View implements IObserver {
     protected Token token;
     protected Controller controller;
@@ -88,6 +90,9 @@ public abstract class View implements IObserver {
 
     @Override
     public void OnReadyForDownload(Object ref, String hostname, Integer port) { }
+
+    @Override
+    public void OnGetSongsSuccess(Object ref, List<Music> musics) { }
 
     @Override
     public void OnExceptionOccurred(Object ref, String exceptionName) { }
