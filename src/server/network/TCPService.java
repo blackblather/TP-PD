@@ -109,7 +109,7 @@ public class TCPService extends common.network.TCPService implements IObserver {
 
     @Override
     public void OnGetSongsSuccess(Object ref, List<Music> musics) {
-        if(ref == this && musics.size() > 0){
+        if(ref == this){
             try {
                 StringBuilder JSONString = new StringBuilder("{\"Type\":\"GetSongs\", \"Success\":true, \"Songs\":[");
                 for(int i = 0; i < musics.size(); i++){
