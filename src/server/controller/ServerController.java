@@ -11,9 +11,11 @@ import common.thread.FileTransferThread;
 import org.json.JSONException;
 import org.json.JSONObject;
 import server.controller.exceptions.InvalidCredentialsException;
+import server.network.MulticastService;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.security.InvalidKeyException;
 import java.sql.*;
@@ -44,8 +46,20 @@ public class ServerController extends Controller {
     private final String key = "501eaafea5db8a40f3b889709db44bea";
     private Tokenizer tokenizer;
 
+    //Multicast
+    private MulticastService multicastService;
+
     public ServerController(){
         try{
+            //Instantiate multicast service
+            multicastService = new MulticastService(InetAddress.getByName("224.0.0.120"), 6001);
+
+            //Create thread for listening to multicast
+            Thread multicastThread = new Thread(() -> {
+               multicastService.ReceiveMsg();
+            });
+            multicastThread.start();
+
             //Initializes tokenizer
             tokenizer = new Tokenizer(key);
 
@@ -224,6 +238,7 @@ public class ServerController extends Controller {
             //Token was previously validated, and payload extracted
             SqlAddMusic(payload, music);
             Notify(ref, NotificationType.addSongSuccess, music);
+            multicastService.SendMsg("Song added");  //TODO: Send JSON info
         } catch (Exception e) {
             ThrowException(ref, e);
         }

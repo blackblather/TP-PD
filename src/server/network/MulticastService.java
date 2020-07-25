@@ -1,6 +1,5 @@
 package server.network;
 
-import common.controller.Controller;
 import common.network.INetworkService;
 
 import java.io.IOException;
@@ -9,7 +8,6 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 /***
- * @author João Monteiro
  * Description: Provides mechanisms used for multicast communication between servers
  ***/
 public class MulticastService implements INetworkService {
@@ -49,6 +47,7 @@ public class MulticastService implements INetworkService {
             try{
                 multicastSocket.receive(p);
                 String text = new String(p.getData(), 0, p.getLength());
+                System.out.println(text);
             } catch (IOException e){
                 System.out.println(e.getMessage());
             }
